@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleveland Creates – Artist Collab Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0e2b1e;color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0e2b1e;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--red)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--red);color:var(--red)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+
+/* HERO */
+.hero-band{background:linear-gradient(135deg,#1a0a1a 0%,#0e2b1e 50%,#1a0a10 100%);padding:70px 32px 50px;text-align:center;position:relative;overflow:hidden}
+.hero-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(192,98,154,.12) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(204,30,75,.08) 0%,transparent 50%)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px;position:relative}
+.hero-band h1{font-size:clamp(32px,5.5vw,60px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px;position:relative}
+.hero-band h1 span{background:linear-gradient(90deg,var(--red),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-band p{font-size:17px;color:rgba(255,255,255,.6);line-height:1.65;max-width:540px;margin:0 auto 32px;position:relative}
+
+/* FILTER TABS */
+.filter-wrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:28px 20px 20px}
+.filter-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);padding:7px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.filter-btn:hover{background:rgba(255,255,255,.1);color:var(--white)}
+.filter-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* GALLERY GRID */
+.gallery-wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.art-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;cursor:pointer;transition:all .25s;position:relative}
+.art-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.art-canvas{height:220px;position:relative;display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden}
+.art-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.6) 100%)}
+.art-body{padding:18px}
+.art-artist{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:4px}
+.art-title{font-size:17px;font-weight:700;margin-bottom:4px;line-height:1.2}
+.art-medium{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:12px}
+.art-quote{font-size:14px;color:rgba(255,255,255,.6);line-height:1.5;font-style:italic;border-left:2px solid var(--red);padding-left:12px;margin-bottom:14px}
+.art-support-btn{display:block;width:100%;padding:11px;background:var(--red);border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s}
+.art-support-btn:hover{background:#a81639}
+.art-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+
+/* CTA BOTTOM */
+.cta-bottom{max-width:700px;margin:0 auto;padding:0 20px 80px;text-align:center}
+.cta-bottom h2{font-size:28px;font-weight:700;margin-bottom:10px}
+.cta-bottom p{font-size:16px;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:28px}
+.cta-bottom-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.cta-main{padding:14px 28px;background:var(--orange);border:none;border-radius:50px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-main:hover{background:#d4631f;transform:translateY(-1px)}
+.cta-alt{padding:13px 28px;background:transparent;border:1.5px solid rgba(255,255,255,.25);border-radius:50px;color:rgba(255,255,255,.7);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-alt:hover{border-color:var(--red);color:var(--red)}
+.email-inline{max-width:420px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px}
+.email-inline h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.email-inline p{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:16px;line-height:1.4}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:130px;padding:10px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+.email-in:focus{border-color:var(--red)}
+.email-in::placeholder{color:rgba(255,255,255,.3)}
+.email-sub{padding:10px 18px;border-radius:9px;background:var(--red);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub:hover{background:#a81639}
+.email-ok{display:none;font-size:14px;color:var(--aqua);font-weight:600;padding:6px 0;text-align:center}
+
+@media(max-width:600px){
+  .site-nav{padding:14px 16px}
+  .nav-ctas .btn-ghost{display:none}
+  .hero-band{padding:50px 20px 36px}
+  .gallery-wrap{padding:0 12px 60px}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero-band">
+  <div class="eyebrow">Arts &amp; Culture · People to Prosperity</div>
+  <h1>Cleveland <span>Creates</span></h1>
+  <p>Meet the artists, musicians, muralists, and makers shaping Cleveland's cultural identity — and discover how your support keeps creativity alive in every neighborhood.</p>
+</section>
+
+<div class="filter-wrap">
+  <button class="filter-btn active" onclick="filterArt('all',this)">All Artists</button>
+  <button class="filter-btn" onclick="filterArt('visual',this)">Visual Art</button>
+  <button class="filter-btn" onclick="filterArt('music',this)">Music</button>
+  <button class="filter-btn" onclick="filterArt('mural',this)">Murals</button>
+  <button class="filter-btn" onclick="filterArt('performance',this)">Performance</button>
+  <button class="filter-btn" onclick="filterArt('youth',this)">Youth Programs</button>
+</div>
+
+<div class="gallery-wrap">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<section class="cta-bottom">
+  <h2>Art Lives Here. So Does Your Impact.</h2>
+  <p>The Cleveland Foundation invests in local artists and cultural programs that bring neighborhoods to life. Your donation keeps creativity accessible to everyone.</p>
+  <div class="cta-bottom-btns">
+    <a class="cta-main" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">🎨 Support Cleveland's Artists</a>
+    <a class="cta-alt" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Learn More ↗</a>
+  </div>
+  <div class="email-inline">
+    <h4>Follow the Creative Pulse of Cleveland</h4>
+    <p>Get stories, events, and artist spotlights from across the city delivered to your inbox.</p>
+    <div class="email-row">
+      <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+      <button class="email-sub" onclick="subEmail()">Follow Along</button>
+    </div>
+    <div class="email-ok" id="emailOk">✓ You're in! Great art is coming your way.</div>
+  </div>
+</section>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0e2b1e;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Follow Cleveland's art scene and Foundation updates.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – Arts Collab Page">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const artists=[
+  {id:'maya',type:'mural',bg:'linear-gradient(135deg,#C0629A,#EE7331)',emoji:'🎨',name:'Maya Johnson',title:'Voices of Hough',medium:'Mural · Hough Neighborhood',quote:'My murals are love letters to the people who built this neighborhood and were never seen.',badge:'🏆 Featured Artist',badgeColor:'rgba(192,98,154,.3)'},
+  {id:'darius',type:'music',bg:'linear-gradient(135deg,#086C43,#19B9A9)',emoji:'🎵',name:'Darius Webb',title:'Sounds of the Shore',medium:'Jazz · Live Performance',quote:'Cleveland gave me everything. My music is my way of giving it back.',badge:'🎶 Live This Month',badgeColor:'rgba(25,185,169,.3)'},
+  {id:'lee',type:'visual',bg:'linear-gradient(135deg,#CC1E4B,#EE7331)',emoji:'🖼️',name:'Lee Park',title:'Steel & Sky',medium:'Photography · Industrial Series',quote:'I see beauty in the bones of this city — the bridges, the mills, the people who built them.',badge:'📷 New Series',badgeColor:'rgba(204,30,75,.3)'},
+  {id:'amara',type:'youth',bg:'linear-gradient(135deg,#1A8DA9,#C0629A)',emoji:'✏️',name:'Amara Osei',title:'Little Artists, Big City',medium:'Youth Arts Education · 12 Schools',quote:'Teaching kids to make art teaches them they have something worth saying.',badge:'🌟 Youth Program',badgeColor:'rgba(26,141,169,.3)'},
+  {id:'carlos',type:'mural',bg:'linear-gradient(135deg,#164430,#086C43)',emoji:'🏙️',name:'Carlos Rivera',title:'Esperanza — Ohio City',medium:'Mural · Ohio City',quote:'This mural is for every family that crossed an ocean to call Cleveland home.',badge:'🌎 Community Pick',badgeColor:'rgba(8,108,67,.3)'},
+  {id:'nadia',type:'performance',bg:'linear-gradient(135deg,#EE7331,#CC1E4B)',emoji:'💃',name:'Nadia Kowalski',title:'Rust Belt Rhythms',medium:'Dance · Tremont Arts',quote:'We dance on industrial floors with jazz in our bones — that\'s what Cleveland is.',badge:'🎭 Performing April',badgeColor:'rgba(238,115,49,.3)'},
+  {id:'jerome',type:'visual',bg:'linear-gradient(135deg,#19B9A9,#1A8DA9)',emoji:'🖌️',name:'Jerome Williams',title:'Glenville Gold',medium:'Acrylic on Canvas',quote:'I paint the faces that history forgot. Cleveland\'s Black artists built this culture.',badge:'🏅 Foundation Grant',badgeColor:'rgba(25,185,169,.3)'},
+  {id:'sarah',type:'music',bg:'linear-gradient(135deg,#C0629A,#164430)',emoji:'🎸',name:'Sarah Kline',title:'Lake Erie Sessions',medium:'Folk · Original Compositions',quote:'Every song I write about Cleveland ends up being about water, loss, and coming home.',badge:'💿 New Album Out',badgeColor:'rgba(192,98,154,.3)'}
+];
+
+let currentFilter='all';
+
+function filterArt(type,btn){
+  currentFilter=type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery();
+}
+
+function renderGallery(){
+  const grid=document.getElementById('galleryGrid');
+  const filtered=currentFilter==='all'?artists:artists.filter(a=>a.type===currentFilter);
+  if(filtered.length===0){grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,.35);padding:40px 0">No artists in this category yet — check back soon!</p>';return;}
+  grid.innerHTML=filtered.map(a=>`
+    <div class="art-card" data-type="${a.type}">
+      <div class="art-canvas" style="background:${a.bg}">
+        <span>${a.emoji}</span>
+        <div class="art-overlay"></div>
+      </div>
+      <div class="art-body">
+        <div class="art-badge" style="background:${a.badgeColor};color:var(--white)">${a.badge}</div>
+        <div class="art-artist">${a.name}</div>
+        <div class="art-title">${a.title}</div>
+        <div class="art-medium">${a.medium}</div>
+        <div class="art-quote">${a.quote}</div>
+        <a class="art-support-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Support This Artist →</a>
+      </div>
+    </div>`).join('');
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{const fd=new FormData();fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');fd.append('subject','Stay Connected – Arts Collab');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openEmail(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ You\'re in! Welcome to the creative community.</p>';
+}
+
+renderGallery();
+</script>
+</body>
+</html>

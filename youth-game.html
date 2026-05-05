@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build the City – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:var(--green);color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:var(--green);z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--pink)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{background:transparent;border:none;color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.75);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--pink);color:var(--pink)}
+
+.hero{text-align:center;padding:56px 24px 36px;max-width:720px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+.hero h1{font-size:clamp(30px,5vw,52px);font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 span{color:var(--pink)}
+.hero p{font-size:16px;color:rgba(255,255,255,.6);line-height:1.65;max-width:500px;margin:0 auto 30px}
+
+/* GAME */
+.game-shell{max-width:820px;margin:0 auto;padding:0 20px 80px}
+.budget-bar{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.budget-label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.budget-amount{font-size:28px;font-weight:700;color:var(--aqua)}
+.budget-note{font-size:13px;color:rgba(255,255,255,.4)}
+.budget-progress{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:4px}
+.budget-fill{height:100%;background:linear-gradient(90deg,var(--aqua),var(--pink));border-radius:3px;transition:width .4s ease}
+
+.phase-label{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px}
+.categories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:24px}
+.category-card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.category-card:hover{background:rgba(255,255,255,.09);transform:translateY(-2px)}
+.category-card.active{border-color:var(--pink);background:rgba(192,98,154,.1)}
+.cat-emoji{font-size:28px;margin-bottom:10px}
+.cat-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.cat-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.4;margin-bottom:12px}
+.cat-allocated{font-size:13px;font-weight:700;color:var(--aqua)}
+.cat-slider-wrap{margin-top:12px;display:none}
+.cat-slider-wrap.open{display:block}
+.slider-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.fund-slider{-webkit-appearance:none;appearance:none;flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;outline:none;cursor:pointer}
+.fund-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--pink);cursor:pointer;box-shadow:0 0 0 3px rgba(192,98,154,.3)}
+.fund-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--pink);cursor:pointer;border:none}
+.slider-val{font-size:14px;font-weight:700;color:var(--pink);min-width:50px;text-align:right}
+
+.impact-preview{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;margin-top:8px;font-size:13px;color:rgba(255,255,255,.5);line-height:1.45;display:none}
+.impact-preview.show{display:block}
+
+.submit-btn{display:block;width:100%;padding:16px;background:var(--pink);border:none;border-radius:14px;color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.submit-btn:hover{background:#a8518a;transform:translateY(-1px)}
+.submit-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;transform:none}
+
+/* Results */
+.results-section{display:none;animation:fadeIn .4s ease}
+.results-section.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.results-header{text-align:center;padding:32px 24px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;margin-bottom:20px}
+.results-header h2{font-size:28px;font-weight:700;margin-bottom:8px}
+.results-header p{font-size:15px;color:rgba(255,255,255,.55);line-height:1.55;max-width:480px;margin:0 auto}
+.city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.city-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:20px;text-align:center}
+.city-card-emoji{font-size:32px;margin-bottom:8px}
+.city-card-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.city-card-amount{font-size:18px;font-weight:700;color:var(--pink);margin-bottom:4px}
+.city-card-impact{font-size:12px;color:rgba(255,255,255,.45);line-height:1.4}
+.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.cta-btn{padding:14px;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:block;border:none;transition:all .2s}
+.cta-btn.primary{background:var(--orange);color:#fff}
+.cta-btn.primary:hover{background:#d4631f}
+.cta-btn.secondary{background:rgba(255,255,255,.08);color:var(--white);border:1.5px solid rgba(255,255,255,.15)}
+.cta-btn.secondary:hover{background:rgba(255,255,255,.14)}
+.email-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;margin-bottom:16px}
+.email-card h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.email-card p{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px;line-height:1.45}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:140px;padding:10px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+.email-in:focus{border-color:var(--pink)}
+.email-in::placeholder{color:rgba(255,255,255,.3)}
+.email-sub-btn{padding:10px 18px;border-radius:9px;background:var(--mid);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub-btn:hover{background:var(--pink)}
+.email-success{display:none;font-size:14px;color:var(--aqua);font-weight:600;padding:8px 0}
+.footer-row{display:flex;gap:10px;justify-content:center}
+.footer-link{background:transparent;border:1.5px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);padding:9px 22px;border-radius:50px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.footer-link:hover{border-color:rgba(255,255,255,.45);color:var(--white)}
+
+@media(max-width:580px){
+  .site-nav{padding:14px 16px}
+  .hero{padding:40px 16px 28px}
+  .game-shell{padding:0 12px 60px}
+  .cta-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmailModal()">Stay Connected</button>
+    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">For Educators &amp; Students</div>
+  <h1>You Have <span>$1 Million.</span><br>Build Your Cleveland.</h1>
+  <p>Imagine you're in charge of investing in Cleveland's youth. Where would you put the money? Allocate your budget and see what your city could become.</p>
+</section>
+
+<div class="game-shell">
+  <!-- Budget Bar -->
+  <div class="budget-bar">
+    <div>
+      <div class="budget-label">Remaining Budget</div>
+      <div class="budget-amount" id="budgetDisplay">$1,000,000</div>
+    </div>
+    <div style="flex:1;max-width:300px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span class="budget-note">$0 allocated</span>
+        <span class="budget-note" id="allocatedDisplay">$0 spent</span>
+      </div>
+      <div class="budget-progress"><div class="budget-fill" id="budgetFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="phase-label">Choose Where to Invest</div>
+  <div id="gameArea">
+    <div class="categories-grid" id="categoriesGrid"></div>
+    <button class="submit-btn" id="submitBtn" onclick="submitBudget()" disabled>Build My City →</button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+    <div class="results-header">
+      <div style="font-size:40px;margin-bottom:12px">🏙️</div>
+      <h2>Your Cleveland is Built!</h2>
+      <p id="resultsDesc">Here's what your investment priorities say about your vision for Cleveland's youth and future.</p>
+    </div>
+    <div class="city-grid" id="cityGrid"></div>
+    <div class="cta-row">
+      <a class="cta-btn primary" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">💛 Fund Real Youth Programs</a>
+      <button class="cta-btn secondary" onclick="resetGame()">↺ Build Again</button>
+    </div>
+    <div class="email-card">
+      <h4>Keep Making a Difference</h4>
+      <p>Get updates on how the Cleveland Foundation invests in young people and educators across our city.</p>
+      <div class="email-row">
+        <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+        <button class="email-sub-btn" onclick="subEmail()">Sign Me Up</button>
+      </div>
+      <div class="email-success" id="emailOk">✓ Welcome! You'll hear from us soon.</div>
+    </div>
+    <div class="footer-row">
+      <button class="footer-link" onclick="resetGame()">↺ Play Again</button>
+      <a class="footer-link" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Visit Our Site ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--green);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Learn how the Cleveland Foundation supports educators and students across our city.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – Youth Game">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const BUDGET=1000000;
+let allocations={};
+
+const cats=[
+  {id:'literacy',emoji:'📚',name:'Early Literacy',desc:'Reading programs and tutoring for K-3 students',impact:'Every $100K trains 50 reading coaches for a year',color:'var(--blue)'},
+  {id:'stem',emoji:'💻',name:'STEM & Tech Labs',desc:'Computer labs, coding clubs, and science equipment',impact:'Every $100K equips 3 school labs with modern tech',color:'var(--aqua)'},
+  {id:'arts',emoji:'🎨',name:'Arts & Music',desc:'Art classes, instruments, and after-school programs',impact:'Every $100K funds 10 artist residencies in schools',color:'var(--pink)'},
+  {id:'mentors',emoji:'🤝',name:'Mentorship Programs',desc:'Connecting students with professional role models',impact:'Every $100K pairs 200 students with career mentors',color:'var(--orange)'},
+  {id:'sports',emoji:'⚽',name:'Athletics & Wellness',desc:'Sports leagues, gym equipment, and health education',impact:'Every $100K keeps 5 school sports programs running',color:'var(--mid)'},
+  {id:'college',emoji:'🎓',name:'College Prep & Scholarships',desc:'SAT prep, counseling, and scholarship funds',impact:'Every $100K sends 20 first-generation students to college',color:'var(--red)'}
+];
+
+function formatDollar(n){
+  if(n>=1000000)return '$'+(n/1000000).toFixed(1)+'M';
+  if(n>=1000)return '$'+(n/1000).toFixed(0)+'K';
+  return '$'+n;
+}
+
+function renderCategories(){
+  const grid=document.getElementById('categoriesGrid');
+  grid.innerHTML='';
+  cats.forEach(cat=>{
+    allocations[cat.id]=allocations[cat.id]||0;
+    const div=document.createElement('div');
+    div.className='category-card';
+    div.id='cat-'+cat.id;
+    div.innerHTML=`<div class="cat-emoji">${cat.emoji}</div>
+      <div class="cat-name">${cat.name}</div>
+      <div class="cat-desc">${cat.desc}</div>
+      <div class="cat-allocated" id="alloc-${cat.id}">${formatDollar(allocations[cat.id])}</div>
+      <div class="cat-slider-wrap open" id="slider-${cat.id}">
+        <div class="slider-row">
+          <input class="fund-slider" type="range" min="0" max="500000" step="50000" value="${allocations[cat.id]}" 
+            oninput="updateAlloc('${cat.id}',this.value)" style="--color:${cat.color}">
+          <span class="slider-val" id="sval-${cat.id}" style="color:${cat.color}">${formatDollar(allocations[cat.id])}</span>
+        </div>
+        <div class="impact-preview ${allocations[cat.id]>0?'show':''}" id="impact-${cat.id}">${cat.impact}</div>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function updateAlloc(id,val){
+  const v=parseInt(val);
+  const total=Object.entries(allocations).reduce((s,[k,a])=>k===id?s:s+a,0);
+  const capped=Math.min(v,BUDGET-total);
+  allocations[id]=capped;
+  document.getElementById('alloc-'+id).textContent=formatDollar(capped);
+  document.getElementById('sval-'+id).textContent=formatDollar(capped);
+  const imp=document.getElementById('impact-'+id);
+  if(capped>0)imp.classList.add('show'); else imp.classList.remove('show');
+  const slider=document.querySelector(`#slider-${id} .fund-slider`);
+  if(slider)slider.value=capped;
+  updateBudgetBar();
+}
+
+function updateBudgetBar(){
+  const spent=Object.values(allocations).reduce((a,b)=>a+b,0);
+  const rem=BUDGET-spent;
+  document.getElementById('budgetDisplay').textContent=formatDollar(rem);
+  document.getElementById('allocatedDisplay').textContent=formatDollar(spent)+' spent';
+  document.getElementById('budgetFill').style.width=(spent/BUDGET*100)+'%';
+  document.getElementById('submitBtn').disabled=spent<100000;
+}
+
+function submitBudget(){
+  const spent=Object.values(allocations).reduce((a,b)=>a+b,0);
+  if(spent<100000)return;
+  document.getElementById('gameArea').style.display='none';
+  const rs=document.getElementById('resultsSection');
+  rs.classList.add('show');
+  const grid=document.getElementById('cityGrid');
+  grid.innerHTML='';
+  cats.filter(c=>allocations[c.id]>0).forEach(c=>{
+    const pct=Math.round(allocations[c.id]/spent*100);
+    grid.innerHTML+=`<div class="city-card">
+      <div class="city-card-emoji">${c.emoji}</div>
+      <div class="city-card-name">${c.name}</div>
+      <div class="city-card-amount">${formatDollar(allocations[c.id])}</div>
+      <div class="city-card-impact">${pct}% of your budget<br>${c.impact.split('Every $100K ')[1]||''}</div>
+    </div>`;
+  });
+  const top=cats.sort((a,b)=>allocations[b.id]-allocations[a.id])[0];
+  document.getElementById('resultsDesc').textContent=`Your top investment is in ${top.name}. You're committed to building a Cleveland where young people have every opportunity to thrive.`;
+}
+
+function resetGame(){
+  allocations={};
+  document.getElementById('gameArea').style.display='block';
+  document.getElementById('resultsSection').classList.remove('show');
+  document.getElementById('emailOk').style.display='none';
+  document.getElementById('emailIn').value='';
+  renderCategories();
+  updateBudgetBar();
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{
+    const fd=new FormData();
+    fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');
+    fd.append('subject','Stay Connected – Youth Development Game');
+    fd.append('email',email);
+    await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
+  }catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub-btn').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+
+function openEmailModal(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ You\'re in! Thanks for staying connected.</p>';
+}
+
+renderCategories();
+updateBudgetBar();
+</script>
+</body>
+</html>

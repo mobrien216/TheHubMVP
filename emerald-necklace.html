@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleveland's Emerald Necklace – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d1f10;color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0d1f10;z-index:1000}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--mid)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--mid);color:var(--aqua)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+
+.hero{padding:56px 24px 36px;text-align:center;max-width:720px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua);margin-bottom:14px}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{color:var(--aqua);font-style:normal}
+.hero p{font-size:16px;color:rgba(255,255,255,.55);line-height:1.65;max-width:520px;margin:0 auto 28px}
+.stats-row{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:36px}
+.stat{text-align:center}
+.stat-num{font-size:26px;font-weight:700;color:var(--aqua)}
+.stat-label{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px}
+
+/* MAP LAYOUT */
+.map-section{max-width:1100px;margin:0 auto;padding:0 20px 60px;display:grid;grid-template-columns:1fr 320px;gap:20px}
+.map-container{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1);position:relative;height:520px}
+#map{height:100%;width:100%}
+.map-attribution{position:absolute;bottom:0;right:0;z-index:500}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.filter-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:18px}
+.filter-label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 14px;border-radius:20px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .2s}
+.chip.park{border-color:var(--mid);color:var(--aqua)}
+.chip.park.active{background:var(--mid);color:#fff}
+.chip.trail{border-color:var(--blue);color:var(--blue)}
+.chip.trail.active{background:var(--blue);color:#fff}
+.chip.lake{border-color:var(--aqua);color:var(--aqua)}
+.chip.lake.active{background:var(--aqua);color:#0d1f10}
+.chip.garden{border-color:var(--orange);color:var(--orange)}
+.chip.garden.active{background:var(--orange);color:#fff}
+
+/* Spot Detail */
+.spot-detail{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:18px;flex:1}
+.spot-placeholder{text-align:center;padding:30px 0;color:rgba(255,255,255,.3)}
+.spot-placeholder span{font-size:32px;display:block;margin-bottom:8px}
+.spot-placeholder p{font-size:13px;line-height:1.4}
+.spot-emoji-big{font-size:36px;margin-bottom:10px}
+.spot-type-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.spot-name{font-size:19px;font-weight:700;margin-bottom:6px}
+.spot-area{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:10px}
+.spot-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.55;margin-bottom:12px}
+.spot-features{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.spot-feat{font-size:11px;padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.55)}
+.spot-threat{font-size:13px;color:rgba(238,115,49,.8);margin-bottom:14px;padding:8px 12px;border-radius:8px;background:rgba(238,115,49,.08);border-left:2px solid var(--orange)}
+.spot-support-btn{display:block;width:100%;padding:11px;background:var(--mid);border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s}
+.spot-support-btn:hover{background:var(--aqua);color:#0d1f10}
+
+/* CTA */
+.cta-section{max-width:700px;margin:0 auto;padding:0 20px 80px;text-align:center}
+.cta-section h2{font-size:28px;font-weight:700;margin-bottom:10px}
+.cta-section p{font-size:16px;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:28px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.cta-main{padding:14px 28px;background:var(--orange);border:none;border-radius:50px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-main:hover{background:#d4631f}
+.cta-alt{padding:13px 28px;background:transparent;border:1.5px solid rgba(255,255,255,.2);border-radius:50px;color:rgba(255,255,255,.7);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-alt:hover{border-color:var(--aqua);color:var(--aqua)}
+.email-inline{max-width:420px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px}
+.email-inline h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.email-inline p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:14px}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:130px;padding:10px 12px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:14px;outline:none}
+.email-in:focus{border-color:var(--aqua)}
+.email-in::placeholder{color:rgba(255,255,255,.25)}
+.email-sub{padding:10px 16px;border-radius:9px;background:var(--mid);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub:hover{background:var(--aqua);color:#0d1f10}
+.email-ok{display:none;font-size:14px;color:var(--aqua);font-weight:600;text-align:center;padding:6px 0}
+
+/* Leaflet overrides */
+.leaflet-popup-content-wrapper{background:rgba(13,31,16,.95);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:var(--white);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.leaflet-popup-tip{background:rgba(13,31,16,.95)}
+.leaflet-popup-content{font-family:'Source Sans 3',sans-serif;font-size:13px;padding:4px 2px}
+.leaflet-popup-content h4{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--aqua)}
+.leaflet-popup-content p{color:rgba(255,255,255,.6);line-height:1.4}
+.leaflet-control-zoom a{background:#1a3520!important;color:var(--white)!important;border-color:rgba(255,255,255,.15)!important}
+.leaflet-control-zoom a:hover{background:#2a4a30!important}
+
+@media(max-width:780px){
+  .map-section{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .map-container{height:360px}
+  .site-nav{padding:14px 16px}
+  .nav-ctas .btn-ghost{display:none}
+  .hero{padding:44px 16px 28px}
+  .stats-row{gap:18px}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Environmentalists · Grow Our Region</div>
+  <h1>Cleveland's <em>Emerald Necklace</em></h1>
+  <p>Over 100 miles of parks, trails, and natural areas encircle Greater Cleveland — explore this extraordinary green ribbon and discover how the Cleveland Foundation protects it.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">23,000+</div><div class="stat-label">Acres Protected</div></div>
+    <div class="stat"><div class="stat-num">100mi</div><div class="stat-label">Of Connected Trails</div></div>
+    <div class="stat"><div class="stat-num">18M</div><div class="stat-label">Annual Park Visitors</div></div>
+  </div>
+</section>
+
+<div class="map-section">
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+
+  <div class="sidebar">
+    <div class="filter-card">
+      <div class="filter-label">Filter Locations</div>
+      <div class="filter-chips">
+        <button class="chip park active" onclick="filterMap('park',this)">🌳 Parks</button>
+        <button class="chip trail active" onclick="filterMap('trail',this)">🥾 Trails</button>
+        <button class="chip lake active" onclick="filterMap('lake',this)">💧 Waterways</button>
+        <button class="chip garden active" onclick="filterMap('garden',this)">🌸 Gardens</button>
+      </div>
+    </div>
+
+    <div class="spot-detail" id="spotDetail">
+      <div class="spot-placeholder">
+        <span>🗺️</span>
+        <p>Click any marker on the map to explore that location</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Help Protect Cleveland's Natural Crown</h2>
+  <p>The Emerald Necklace is one of America's great urban nature systems. Your support keeps it accessible, healthy, and growing for generations to come.</p>
+  <div class="cta-btns">
+    <a class="cta-main" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">🌿 Protect the Necklace</a>
+    <a class="cta-alt" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Learn More ↗</a>
+  </div>
+  <div class="email-inline">
+    <h4>Join the Green Movement</h4>
+    <p>Trail updates, conservation news, and volunteer opportunities in your inbox.</p>
+    <div class="email-row">
+      <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+      <button class="email-sub" onclick="subEmail()">Sign Up</button>
+    </div>
+    <div class="email-ok" id="emailOk">✓ Welcome to the movement!</div>
+  </div>
+</section>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0d1f10;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Get conservation news and environmental stewardship updates from the Cleveland Foundation.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – Emerald Necklace Map">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const spots=[
+  {id:1,type:'park',lat:41.3939,lng:-81.7144,emoji:'🌳',name:'Rocky River Reservation',area:'Olmsted Falls to Lake Erie',desc:'A spectacular 4,000-acre valley carved by the Rocky River, stretching from the Cuyahoga border to Lake Erie. Features meadows, forests, and stunning gorge views.',features:['Fishing','Horseback Trails','Golf Course','Picnic Areas'],threat:'⚠️ Invasive species threaten native wildflowers — Cleveland Foundation supports removal programs.'},
+  {id:2,type:'park',lat:41.4764,lng:-81.6546,emoji:'🦌',name:'North Chagrin Reservation',area:'Willoughby Hills',desc:'One of the most wild corners of the Emerald Necklace, home to deer, red foxes, and over 80 species of birds. Features ancient beech forests and glacial-carved gorges.',features:['Hiking','Birding','Cross-Country Ski','Nature Center'],threat:'⚠️ Trail erosion from heavy use — restoration funding critically needed.'},
+  {id:3,type:'trail',lat:41.4250,lng:-81.6800,emoji:'🥾',name:'Towpath Trail',area:'Cuyahoga Valley Corridor',desc:'Following the historic Ohio & Erie Canal for 85 miles, the Towpath Trail connects Cleveland to Akron through stunning natural scenery and rich American history.',features:['Cycling','Walking','Historic Sites','Wildlife Viewing'],threat:'⚠️ Flooding and storm damage increasingly close sections — infrastructure support needed.'},
+  {id:4,type:'lake',lat:41.5101,lng:-81.6941,emoji:'💧',name:'Lake Erie Shoreline',area:'North Cleveland Lakefront',desc:'The southern shore of the world\'s 11th largest lake, offering beaches, fishing piers, and incredible migratory bird activity. The lifeline of Greater Cleveland\'s natural identity.',features:['Swimming','Kayaking','Fishing','Birding'],threat:'⚠️ Algal blooms and pollution threaten water quality — watershed protection is urgent.'},
+  {id:5,type:'garden',lat:41.4733,lng:-81.5944,emoji:'🌸',name:'Cleveland Botanical Garden',area:'University Circle',desc:'A 10-acre oasis in the heart of University Circle, with stunning glass conservatories replicating ecosystems from Madagascar and Costa Rica alongside curated formal gardens.',features:['Conservatory','Rose Garden','Children\'s Garden','Events'],threat:'⚠️ Community garden programs serve 2,000+ families — continued funding is essential.'},
+  {id:6,type:'park',lat:41.3597,lng:-81.6733,emoji:'🦅',name:'Big Creek Reservation',area:'Middleburg Hts · Brooklyn',desc:'A hidden gem following Big Creek through suburban southwest Cleveland, with restored wetlands and meadows providing critical habitat for migratory songbirds.',features:['Wetlands','Picnic Areas','Sledding Hill','Nature Walks'],threat:'⚠️ Stream channelization projects threaten natural hydrology — restoration in progress.'},
+  {id:7,type:'trail',lat:41.4410,lng:-81.7850,emoji:'🌊',name:'Lake to Lake Trail',area:'Lakewood to Rocky River',desc:'A key connector trail linking the lakefront with the Rocky River valley, passing through Lakewood parks and offering stunning Lake Erie views.',features:['Cycling','Running','Lake Views','Park Access'],threat:'⚠️ Connectivity gaps remain — Cleveland Foundation champions trail link completion.'},
+  {id:8,type:'lake',lat:41.4100,lng:-81.5870,emoji:'🐸',name:'Cuyahoga River Corridor',area:'Flats to Cuyahoga Valley',desc:'Once famous for catching fire in 1969, the Cuyahoga River is now a conservation success story — a testament to what community investment and environmental commitment can achieve.',features:['Kayaking','Fishing','History','Wildlife'],threat:'⚠️ Continued monitoring needed to sustain the river\'s remarkable recovery.'}
+];
+
+const typeColors={park:'#086C43',trail:'#1A8DA9',lake:'#19B9A9',garden:'#EE7331'};
+const activeFilters=new Set(['park','trail','lake','garden']);
+let markers=[];
+
+const map=L.map('map',{center:[41.4250,-81.6700],zoom:11,zoomControl:true});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © Carto',maxZoom:19}).addTo(map);
+
+function createIcon(type){
+  const emoji={park:'🌳',trail:'🥾',lake:'💧',garden:'🌸'}[type]||'📍';
+  return L.divIcon({className:'',html:`<div style="width:38px;height:38px;border-radius:50%;background:${typeColors[type]};display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid rgba(255,255,255,.3);box-shadow:0 2px 10px rgba(0,0,0,.4);cursor:pointer">${emoji}</div>`,iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
+}
+
+function renderMarkers(){
+  markers.forEach(m=>m.remove());
+  markers=[];
+  spots.filter(s=>activeFilters.has(s.type)).forEach(s=>{
+    const m=L.marker([s.lat,s.lng],{icon:createIcon(s.type)}).addTo(map);
+    m.bindPopup(`<h4>${s.emoji} ${s.name}</h4><p>${s.area}</p>`);
+    m.on('click',()=>showSpot(s));
+    markers.push(m);
+  });
+}
+
+function showSpot(s){
+  const d=document.getElementById('spotDetail');
+  d.innerHTML=`<div class="spot-emoji-big">${s.emoji}</div>
+    <div class="spot-type-tag" style="color:${typeColors[s.type]}">${s.type.toUpperCase()}</div>
+    <div class="spot-name">${s.name}</div>
+    <div class="spot-area">📍 ${s.area}</div>
+    <div class="spot-desc">${s.desc}</div>
+    <div class="spot-features">${s.features.map(f=>`<span class="spot-feat">${f}</span>`).join('')}</div>
+    <div class="spot-threat">${s.threat}</div>
+    <a class="spot-support-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Protect This Place →</a>`;
+}
+
+function filterMap(type,btn){
+  if(activeFilters.has(type)){
+    if(activeFilters.size>1){activeFilters.delete(type);btn.classList.remove('active');}
+  }else{
+    activeFilters.add(type);btn.classList.add('active');
+  }
+  renderMarkers();
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{const fd=new FormData();fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');fd.append('subject','Stay Connected – Emerald Necklace Map');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openEmail(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ You\'re part of the green movement!</p>';
+}
+
+renderMarkers();
+</script>
+</body>
+</html>

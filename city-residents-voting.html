@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shape Cleveland's Future – The Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:var(--green);color:var(--white);min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:var(--green);z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px}
+.btn-sm-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.75);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-sm-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-sm-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-sm-donate:hover{background:#d4631f}
+.btn-back{background:transparent;border:none;color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;transition:color .2s;letter-spacing:.06em}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+
+/* HERO */
+.hero{padding:60px 32px 40px;max-width:760px;margin:0 auto;text-align:center}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+.hero h1 em{color:var(--aqua);font-style:normal}
+.hero p{font-size:17px;color:rgba(255,255,255,.6);line-height:1.65;max-width:520px;margin:0 auto 32px}
+.hero-stat-row{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:40px}
+.stat{text-align:center}
+.stat-num{font-size:28px;font-weight:700;color:var(--aqua)}
+.stat-label{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+
+/* GAME AREA */
+.game-wrap{max-width:740px;margin:0 auto;padding:0 24px 80px}
+.game-container{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden}
+
+/* Progress */
+.progress-bar-wrap{padding:20px 28px 0}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.progress-count{font-size:13px;font-weight:700;color:rgba(255,255,255,.6)}
+.progress-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--aqua),var(--blue));border-radius:3px;transition:width .5s ease}
+
+/* Question card */
+.question-panel{padding:32px 28px 28px}
+.question-category{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.question-text{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.question-desc{font-size:15px;color:rgba(255,255,255,.55);line-height:1.5;margin-bottom:28px}
+
+/* Vote buttons */
+.vote-options{display:grid;gap:12px}
+.vote-btn{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 20px;cursor:pointer;text-align:left;color:var(--white);font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:14px}
+.vote-btn:hover:not(.voted){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);transform:translateX(4px)}
+.vote-btn.selected{border-color:var(--aqua);background:rgba(25,185,169,.12)}
+.vote-btn.not-selected{opacity:.45}
+.vote-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.vote-content{flex:1}
+.vote-title{font-size:16px;font-weight:700;margin-bottom:3px}
+.vote-sub{font-size:13px;color:rgba(255,255,255,.5)}
+.vote-bar-wrap{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:8px;overflow:hidden;display:none}
+.vote-bar{height:100%;background:var(--aqua);border-radius:2px;transition:width .6s ease}
+.vote-pct{font-size:12px;font-weight:700;color:var(--aqua);margin-top:4px;display:none}
+
+.next-btn{display:block;width:100%;margin-top:20px;padding:14px;background:var(--orange);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;opacity:0;pointer-events:none}
+.next-btn.active{opacity:1;pointer-events:auto}
+.next-btn:hover{background:#d4631f}
+
+/* Results */
+.results-panel{display:none;padding:40px 28px}
+.results-panel.show{display:block}
+.results-confetti{font-size:48px;margin-bottom:16px;text-align:center}
+.results-title{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px}
+.results-sub{font-size:16px;color:rgba(255,255,255,.55);text-align:center;margin-bottom:32px;line-height:1.5}
+.results-breakdown{margin-bottom:32px}
+.result-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.result-row-label{font-size:14px;font-weight:600;width:140px;flex-shrink:0;color:rgba(255,255,255,.75)}
+.result-row-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.result-row-bar{height:100%;border-radius:4px;transition:width 1s ease}
+.result-row-pct{font-size:13px;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.profile-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:24px;margin-bottom:28px;text-align:center}
+.profile-emoji{font-size:36px;margin-bottom:8px}
+.profile-title{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aqua);margin-bottom:6px}
+.profile-name{font-size:22px;font-weight:700;margin-bottom:8px}
+.profile-desc{font-size:14px;color:rgba(255,255,255,.55);line-height:1.55}
+
+/* CTAs */
+.cta-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.cta-donate-btn{padding:14px;background:var(--orange);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:block;transition:all .2s}
+.cta-donate-btn:hover{background:#d4631f}
+.cta-email-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px}
+.cta-email-card h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.cta-email-card p{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px;line-height:1.45}
+.cta-email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:140px;padding:10px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+.email-in:focus{border-color:var(--orange)}
+.email-in::placeholder{color:rgba(255,255,255,.3)}
+.email-sub-btn{padding:10px 18px;border-radius:9px;background:var(--mid);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.email-sub-btn:hover{background:var(--aqua)}
+.email-success{display:none;font-size:14px;color:var(--aqua);font-weight:600;padding:8px 0}
+.retry-row{display:flex;gap:10px;justify-content:center}
+.retry-btn{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.55);padding:9px 22px;border-radius:50px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.retry-btn:hover{border-color:rgba(255,255,255,.5);color:var(--white)}
+
+@media(max-width:600px){
+  .site-nav{padding:14px 18px}
+  .nav-ctas .btn-sm-ghost{display:none}
+  .hero{padding:40px 20px 30px}
+  .hero-stat-row{gap:20px}
+  .game-wrap{padding:0 16px 60px}
+  .question-panel{padding:24px 18px 20px}
+  .cta-pair{grid-template-columns:1fr}
+  .progress-bar-wrap{padding:16px 18px 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-sm-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-sm-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">For City Residents</div>
+  <h1>Your Voice <em>Shapes</em><br>Your Neighborhood</h1>
+  <p>You know Cleveland's streets better than anyone. Cast your votes on what matters most and see how your neighbors think about our city's future.</p>
+  <div class="hero-stat-row">
+    <div class="stat"><div class="stat-num">1M+</div><div class="stat-label">CLE Residents</div></div>
+    <div class="stat"><div class="stat-num">$500M</div><div class="stat-label">Invested in Neighborhoods</div></div>
+    <div class="stat"><div class="stat-num">100+</div><div class="stat-label">Years in Cleveland</div></div>
+  </div>
+</section>
+
+<div class="game-wrap">
+<div class="game-container">
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Voting Progress</span>
+      <span class="progress-count" id="progressCount">0 of 6 topics</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Question Panel -->
+  <div class="question-panel" id="questionPanel">
+    <div class="question-category" id="qCategory">Housing</div>
+    <div class="question-text" id="qText">Loading...</div>
+    <div class="question-desc" id="qDesc"></div>
+    <div class="vote-options" id="voteOptions"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Topic →</button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-panel" id="resultsPanel">
+    <div class="results-confetti">🗳️</div>
+    <div class="results-title">Your Cleveland Vision</div>
+    <div class="results-sub">Here's what your votes say about your priorities — and how you compare to the community.</div>
+    <div class="profile-box">
+      <div class="profile-emoji" id="profileEmoji"></div>
+      <div class="profile-title">Your Civic Profile</div>
+      <div class="profile-name" id="profileName"></div>
+      <div class="profile-desc" id="profileDesc"></div>
+    </div>
+    <div class="results-breakdown" id="resultsBreakdown"></div>
+    <div class="cta-pair">
+      <a class="cta-donate-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">❤️ Invest in Your Neighborhood</a>
+      <a class="cta-donate-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener" style="background:var(--blue)">🌐 Explore More</a>
+    </div>
+    <div class="cta-email-card" style="margin-bottom:20px">
+      <h4>Stay in the Conversation</h4>
+      <p>Get updates on neighborhood investment and how the Cleveland Foundation is building vibrant communities.</p>
+      <div class="cta-email-row">
+        <input class="email-in" type="email" id="emailInput" placeholder="your@email.com">
+        <button class="email-sub-btn" onclick="submitEmail()">Keep Me Posted</button>
+      </div>
+      <div class="email-success" id="emailSuccess">✓ You're in! Watch your inbox.</div>
+    </div>
+    <div class="retry-row">
+      <button class="retry-btn" onclick="resetGame()">↺ Vote Again</button>
+      <a class="retry-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Visit Our Site ↗</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Email inline modal trigger for nav button -->
+<div id="emailQuickModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--green);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="closeEmail()" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Get updates on how Cleveland Foundation is investing in your neighborhood.</p>
+    <form id="quickEmailForm" onsubmit="submitQuickEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – City Residents Page">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+    <p id="quickEmailSuccess" style="display:none;color:var(--aqua);font-weight:600;text-align:center;padding:12px 0">✓ You're in! We'll be in touch.</p>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    category:"Housing", catColor:"var(--blue)",
+    text:"Cleveland needs more investment in...",
+    desc:"Where should resources go to strengthen neighborhoods and housing stability?",
+    options:[
+      {icon:"🏠",title:"Affordable Home Ownership",sub:"Help families buy and keep homes",value:"community"},
+      {icon:"🏢",title:"Mixed-Income Development",sub:"New construction with diverse price points",value:"growth"},
+      {icon:"🔨",title:"Rehab & Preservation",sub:"Restore existing homes and historic buildings",value:"community"},
+      {icon:"🌳",title:"Green Space & Amenities",sub:"Parks, playgrounds, and gathering places",value:"quality"}
+    ]
+  },
+  {
+    category:"Education", catColor:"var(--aqua)",
+    text:"The biggest priority for Cleveland's youth is...",
+    desc:"What investment would make the most difference for our next generation?",
+    options:[
+      {icon:"📚",title:"Reading & Early Literacy",sub:"Strong foundations before kindergarten",value:"community"},
+      {icon:"💻",title:"Tech & STEM Skills",sub:"Preparing kids for tomorrow's jobs",value:"growth"},
+      {icon:"🎨",title:"Arts & Creative Programs",sub:"Expression, culture, and identity",value:"quality"},
+      {icon:"🏃",title:"After-School & Mentorship",sub:"Safe spaces and positive role models",value:"community"}
+    ]
+  },
+  {
+    category:"Economy", catColor:"var(--orange)",
+    text:"Cleveland's economy grows best when we invest in...",
+    desc:"What strategy creates the most lasting prosperity for residents?",
+    options:[
+      {icon:"🏭",title:"Manufacturing & Trades",sub:"Blue-collar jobs with real wages",value:"growth"},
+      {icon:"🧪",title:"Innovation & Startups",sub:"New companies, new industries",value:"growth"},
+      {icon:"🛒",title:"Small Business & Corridors",sub:"Neighborhood shops and local entrepreneurs",value:"community"},
+      {icon:"🎓",title:"Workforce Training",sub:"Connecting residents to existing jobs",value:"community"}
+    ]
+  },
+  {
+    category:"Environment", catColor:"var(--mid)",
+    text:"For Cleveland's environment, the top priority is...",
+    desc:"How should we protect and improve our natural environment?",
+    options:[
+      {icon:"💧",title:"Clean Water & Lake Erie",sub:"Protecting our most precious resource",value:"quality"},
+      {icon:"🌿",title:"Urban Greenways & Trails",sub:"Expanding parks and walking paths",value:"quality"},
+      {icon:"☀️",title:"Renewable Energy Access",sub:"Clean power for all neighborhoods",value:"growth"},
+      {icon:"♻️",title:"Waste Reduction Programs",sub:"Recycling, composting, and cleanup",value:"community"}
+    ]
+  },
+  {
+    category:"Health", catColor:"var(--pink)",
+    text:"Cleveland residents most need access to...",
+    desc:"What health investments would most improve daily life?",
+    options:[
+      {icon:"🏥",title:"Affordable Primary Care",sub:"Doctors and clinics in every neighborhood",value:"community"},
+      {icon:"🧠",title:"Mental Health Services",sub:"Counseling, crisis care, and support",value:"community"},
+      {icon:"🥗",title:"Healthy Food Access",sub:"Fresh produce in food deserts",value:"quality"},
+      {icon:"👶",title:"Maternal & Child Health",sub:"Support for new families",value:"community"}
+    ]
+  },
+  {
+    category:"Arts & Culture", catColor:"var(--red)",
+    text:"Cleveland's cultural identity is strongest when...",
+    desc:"What makes Cleveland a place people want to call home?",
+    options:[
+      {icon:"🎭",title:"Neighborhood Arts Programs",sub:"Culture in every community, not just downtown",value:"quality"},
+      {icon:"🏛️",title:"World-Class Institutions",sub:"Investing in our great museums and orchestras",value:"quality"},
+      {icon:"🎵",title:"Local Artists & Musicians",sub:"Supporting creative careers in Cleveland",value:"community"},
+      {icon:"🎡",title:"Festivals & Public Events",sub:"Celebrating who we are, together",value:"community"}
+    ]
+  }
+];
+
+let current=0, userVotes=[], valueTally={community:0,growth:0,quality:0};
+
+function loadQuestion(){
+  const q=questions[current];
+  document.getElementById('progressCount').textContent=`${current} of ${questions.length} topics`;
+  document.getElementById('progressFill').style.width=`${(current/questions.length)*100}%`;
+  const catEl=document.getElementById('qCategory');
+  catEl.textContent=q.category;
+  catEl.style.background=`rgba(255,255,255,.08)`;
+  catEl.style.color=q.catColor;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qDesc').textContent=q.desc;
+  const opts=document.getElementById('voteOptions');
+  opts.innerHTML='';
+  q.options.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='vote-btn';
+    btn.dataset.idx=i;
+    btn.dataset.value=o.value;
+    btn.innerHTML=`<div class="vote-icon" style="background:rgba(255,255,255,.07)">${o.icon}</div>
+      <div class="vote-content">
+        <div class="vote-title">${o.title}</div>
+        <div class="vote-sub">${o.sub}</div>
+        <div class="vote-bar-wrap"><div class="vote-bar" style="width:0%"></div></div>
+        <div class="vote-pct">0%</div>
+      </div>`;
+    btn.onclick=()=>selectVote(i,o.value);
+    opts.appendChild(btn);
+  });
+  document.getElementById('nextBtn').classList.remove('active');
+}
+
+let hasVoted=false;
+function selectVote(idx,value){
+  if(hasVoted)return;
+  hasVoted=true;
+  userVotes.push({q:current,choice:idx,value});
+  valueTally[value]=(valueTally[value]||0)+1;
+  const btns=document.querySelectorAll('.vote-btn');
+  // Simulated community votes
+  const simVotes=[
+    [42,28,18,12],[35,22,28,15],[30,38,20,12],[25,30,32,13],[40,25,20,15],[32,28,25,15]
+  ];
+  const sim=simVotes[current]||[25,25,25,25];
+  btns.forEach((btn,i)=>{
+    if(i===idx){btn.classList.add('selected')}else{btn.classList.add('not-selected')}
+    btn.classList.add('voted');
+    const barWrap=btn.querySelector('.vote-bar-wrap');
+    const bar=btn.querySelector('.vote-bar');
+    const pct=btn.querySelector('.vote-pct');
+    barWrap.style.display='block';
+    pct.style.display='block';
+    let p=i===idx?sim[i]+8:sim[i];
+    bar.style.width=`${Math.min(p,85)}%`;
+    pct.textContent=`${Math.min(p,85)}%`;
+  });
+  document.getElementById('nextBtn').classList.add('active');
+  if(current===questions.length-1){document.getElementById('nextBtn').textContent='See Your Results →'}
+}
+
+function nextQuestion(){
+  hasVoted=false;
+  current++;
+  if(current>=questions.length){showResults();return;}
+  loadQuestion();
+}
+
+function showResults(){
+  document.getElementById('progressCount').textContent=`${questions.length} of ${questions.length} topics`;
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('questionPanel').style.display='none';
+  const rp=document.getElementById('resultsPanel');
+  rp.classList.add('show');
+
+  const profiles=[
+    {thresh:'community',emoji:'🏘️',name:'The Community Champion',desc:'You believe Cleveland grows strongest from the ground up — investing in people, neighborhoods, and the bonds that hold communities together.'},
+    {thresh:'growth',emoji:'🚀',name:'The Growth Catalyst',desc:'You see Cleveland\'s future in bold economic moves, innovation, and creating new opportunities that lift all residents.'},
+    {thresh:'quality',emoji:'🌿',name:'The Quality-of-Life Advocate',desc:'You want Cleveland to be a beautiful, healthy, inspiring place — a city people choose to stay in and be proud of.'}
+  ];
+  const top=Object.entries(valueTally).sort((a,b)=>b[1]-a[1])[0][0];
+  const profile=profiles.find(p=>p.thresh===top)||profiles[0];
+  document.getElementById('profileEmoji').textContent=profile.emoji;
+  document.getElementById('profileName').textContent=profile.name;
+  document.getElementById('profileDesc').textContent=profile.desc;
+
+  const breakdown=document.getElementById('resultsBreakdown');
+  const items=[
+    {label:'Community Focus',key:'community',color:'var(--aqua)'},
+    {label:'Growth & Economy',key:'growth',color:'var(--orange)'},
+    {label:'Quality of Life',key:'quality',color:'var(--pink)'}
+  ];
+  breakdown.innerHTML='<div style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">Your Priority Breakdown</div>';
+  const total=Object.values(valueTally).reduce((a,b)=>a+b,0)||1;
+  items.forEach(it=>{
+    const pct=Math.round(((valueTally[it.key]||0)/total)*100);
+    breakdown.innerHTML+=`<div class="result-row">
+      <span class="result-row-label">${it.label}</span>
+      <div class="result-row-bar-wrap"><div class="result-row-bar" style="width:${pct}%;background:${it.color}"></div></div>
+      <span class="result-row-pct" style="color:${it.color}">${pct}%</span>
+    </div>`;
+  });
+}
+
+function resetGame(){
+  current=0;userVotes=[];valueTally={community:0,growth:0,quality:0};hasVoted=false;
+  document.getElementById('questionPanel').style.display='block';
+  document.getElementById('resultsPanel').classList.remove('show');
+  document.getElementById('emailSuccess').style.display='none';
+  document.getElementById('emailInput').value='';
+  loadQuestion();
+}
+
+async function submitEmail(){
+  const email=document.getElementById('emailInput').value;
+  if(!email)return;
+  try{
+    const fd=new FormData();
+    fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');
+    fd.append('subject','Stay Connected – City Residents Voting Game');
+    fd.append('email',email);
+    await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
+  }catch(e){}
+  document.getElementById('emailInput').style.display='none';
+  document.querySelector('.email-sub-btn').style.display='none';
+  document.getElementById('emailSuccess').style.display='block';
+}
+
+function openEmail(){document.getElementById('emailQuickModal').style.display='flex'}
+function closeEmail(){document.getElementById('emailQuickModal').style.display='none'}
+async function submitQuickEmail(e){
+  e.preventDefault();
+  const data=new FormData(e.target);
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:data})}catch(er){}
+  e.target.style.display='none';
+  document.getElementById('quickEmailSuccess').style.display='block';
+}
+
+loadQuestion();
+</script>
+</body>
+</html>

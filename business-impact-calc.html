@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleveland Impact Calculator – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0a1a24;color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0a1a24;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+
+.hero{text-align:center;padding:70px 24px 50px;max-width:740px;margin:0 auto;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse at center,rgba(26,141,169,.12) 0%,transparent 70%);pointer-events:none}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.hero h1{font-size:clamp(30px,5vw,54px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{color:var(--blue);font-style:normal}
+.hero p{font-size:17px;color:rgba(255,255,255,.55);line-height:1.65;max-width:520px;margin:0 auto}
+
+/* CALC */
+.calc-wrap{max-width:860px;margin:0 auto;padding:20px 20px 80px}
+.calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.calc-left{display:flex;flex-direction:column;gap:16px}
+.calc-right{position:sticky;top:90px;align-self:start}
+
+.input-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:24px}
+.input-card-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.input-card-title span{font-size:16px}
+.input-group{margin-bottom:16px}
+.input-group:last-child{margin-bottom:0}
+.input-label{font-size:14px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:8px;display:block}
+.input-label em{font-style:normal;font-size:12px;color:rgba(255,255,255,.35);font-weight:400;margin-left:6px}
+.input-field{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:15px;outline:none;transition:border-color .2s}
+.input-field:focus{border-color:var(--blue)}
+.input-field::placeholder{color:rgba(255,255,255,.25)}
+.select-field{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);background:rgba(20,40,50,.9);color:var(--white);font-family:inherit;font-size:15px;outline:none;cursor:pointer;transition:border-color .2s}
+.select-field:focus{border-color:var(--blue)}
+.radio-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt{display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);transition:all .2s}
+.radio-opt:hover{background:rgba(255,255,255,.06)}
+.radio-opt input[type=radio]{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
+.radio-opt-label{font-size:14px;font-weight:600;color:rgba(255,255,255,.75)}
+.radio-opt-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:1px}
+
+/* RESULTS PANEL */
+.results-card{background:rgba(26,141,169,.08);border:1px solid rgba(26,141,169,.25);border-radius:16px;padding:24px}
+.results-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
+.result-metric{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.result-metric:last-of-type{border-bottom:none}
+.metric-label{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:4px}
+.metric-value{font-size:26px;font-weight:700;color:var(--white);line-height:1.1}
+.metric-value.highlight{color:var(--aqua)}
+.metric-desc{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px;line-height:1.4}
+.roi-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:rgba(25,185,169,.15);border:1px solid rgba(25,185,169,.3);font-size:13px;font-weight:700;color:var(--aqua);margin-bottom:20px}
+
+.calc-cta{margin-top:16px}
+.calc-cta .donate-btn{display:block;width:100%;padding:13px;background:var(--orange);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s;margin-bottom:10px}
+.calc-cta .donate-btn:hover{background:#d4631f}
+.email-mini{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px}
+.email-mini h4{font-size:13px;font-weight:700;margin-bottom:8px}
+.email-mini-row{display:flex;gap:8px}
+.email-mini-in{flex:1;padding:9px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:13px;outline:none}
+.email-mini-in:focus{border-color:var(--blue)}
+.email-mini-in::placeholder{color:rgba(255,255,255,.25)}
+.email-mini-btn{padding:9px 14px;border-radius:8px;background:var(--mid);border:none;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
+.email-mini-btn:hover{background:var(--blue)}
+.email-mini-ok{display:none;font-size:13px;color:var(--aqua);font-weight:600;text-align:center;padding:6px 0}
+
+/* Bottom stats strip */
+.stats-strip{background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:32px 20px;margin-bottom:0}
+.stats-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.strip-num{font-size:26px;font-weight:700;color:var(--blue);margin-bottom:4px}
+.strip-label{font-size:12px;color:rgba(255,255,255,.4);line-height:1.3}
+
+@media(max-width:720px){
+  .calc-layout{grid-template-columns:1fr}
+  .calc-right{position:static}
+  .site-nav{padding:14px 16px}
+  .nav-ctas .btn-ghost{display:none}
+  .hero{padding:48px 16px 36px}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Business Leaders &amp; Politicians · Grow Our Region</div>
+  <h1>What Does Investing in<br>Cleveland <em>Really</em> Return?</h1>
+  <p>Calculate the economic, workforce, and community impact of philanthropic investment in the Greater Cleveland region.</p>
+</section>
+
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div><div class="strip-num">$2.8B</div><div class="strip-label">Invested in the region since 1914</div></div>
+    <div><div class="strip-num">3.2×</div><div class="strip-label">Average economic multiplier</div></div>
+    <div><div class="strip-num">14,000+</div><div class="strip-label">Grants awarded annually</div></div>
+    <div><div class="strip-num">104K</div><div class="strip-label">Jobs supported through grantmaking</div></div>
+  </div>
+</div>
+
+<div class="calc-wrap">
+  <div class="calc-layout">
+    <!-- LEFT: Inputs -->
+    <div class="calc-left">
+
+      <div class="input-card">
+        <div class="input-card-title"><span>🏢</span> Your Organization</div>
+        <div class="input-group">
+          <label class="input-label">Industry Sector</label>
+          <select class="select-field" id="sector" onchange="calculate()">
+            <option value="">Select your sector</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="finance">Finance &amp; Banking</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="tech">Technology</option>
+            <option value="legal">Legal &amp; Professional</option>
+            <option value="construction">Construction &amp; Real Estate</option>
+            <option value="retail">Retail &amp; Hospitality</option>
+            <option value="government">Government &amp; Public Sector</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Number of Employees <em>in Greater Cleveland</em></label>
+          <input class="input-field" type="number" id="employees" placeholder="e.g. 500" oninput="calculate()">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Annual Revenue <em>approximate</em></label>
+          <select class="select-field" id="revenue" onchange="calculate()">
+            <option value="">Select range</option>
+            <option value="1">Under $1M</option>
+            <option value="5">$1M – $10M</option>
+            <option value="50">$10M – $100M</option>
+            <option value="500">$100M – $1B</option>
+            <option value="5000">Over $1B</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-card">
+        <div class="input-card-title"><span>💰</span> Investment Parameters</div>
+        <div class="input-group">
+          <label class="input-label">Annual Philanthropic Investment</label>
+          <input class="input-field" type="number" id="donation" placeholder="e.g. 25000" oninput="calculate()">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Primary Impact Area</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="focus" value="workforce" onchange="calculate()"><div><div class="radio-opt-label">Workforce &amp; Economic Development</div><div class="radio-opt-sub">Jobs, training, and business growth</div></div></label>
+            <label class="radio-opt"><input type="radio" name="focus" value="education" onchange="calculate()"><div><div class="radio-opt-label">Education &amp; Youth</div><div class="radio-opt-sub">Schools, scholarships, and mentorship</div></div></label>
+            <label class="radio-opt"><input type="radio" name="focus" value="health" onchange="calculate()"><div><div class="radio-opt-label">Health &amp; Human Services</div><div class="radio-opt-sub">Community health and stability</div></div></label>
+            <label class="radio-opt"><input type="radio" name="focus" value="neighborhoods" onchange="calculate()"><div><div class="radio-opt-label">Neighborhoods &amp; Place</div><div class="radio-opt-sub">Housing, arts, and revitalization</div></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="calc-right">
+      <div class="results-card">
+        <div class="results-title">📊 Your Impact Estimate</div>
+
+        <div class="roi-badge" id="roiBadge">Enter values to calculate ↓</div>
+
+        <div class="result-metric">
+          <div class="metric-label">Estimated Economic Return</div>
+          <div class="metric-value highlight" id="economicReturn">—</div>
+          <div class="metric-desc">Direct and indirect economic activity generated in the Cleveland metro</div>
+        </div>
+        <div class="result-metric">
+          <div class="metric-label">Jobs Supported (est.)</div>
+          <div class="metric-value" id="jobsSupported">—</div>
+          <div class="metric-desc">Full and part-time positions enabled through this level of investment</div>
+        </div>
+        <div class="result-metric">
+          <div class="metric-label">Community Members Reached</div>
+          <div class="metric-value" id="peopleReached">—</div>
+          <div class="metric-desc">Individuals and families benefiting from programs at this funding level</div>
+        </div>
+        <div class="result-metric">
+          <div class="metric-label">5-Year Cumulative Impact</div>
+          <div class="metric-value" id="fiveYear">—</div>
+          <div class="metric-desc">Compounding benefit across sustained investment over 5 years</div>
+        </div>
+        <div class="result-metric">
+          <div class="metric-label">Tax Benefit Estimate</div>
+          <div class="metric-value" id="taxBenefit">—</div>
+          <div class="metric-desc">Approximate federal/state tax deduction for corporate philanthropic gifts</div>
+        </div>
+
+        <div class="calc-cta">
+          <a class="donate-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Make This Investment Real →</a>
+          <div class="email-mini">
+            <h4>Get the Full ROI Report</h4>
+            <div class="email-mini-row">
+              <input class="email-mini-in" type="email" id="emailIn" placeholder="your@email.com">
+              <button class="email-mini-btn" onclick="subEmail()">Send Report</button>
+            </div>
+            <div class="email-mini-ok" id="emailOk">✓ Report sent! Check your inbox.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0a1a24;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Receive business case data and investment opportunities from the Cleveland Foundation.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – Impact Calculator">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const multipliers={healthcare:3.8,finance:3.2,manufacturing:4.1,tech:3.5,legal:2.9,construction:3.6,retail:2.5,government:3.0};
+const focusMultipliers={workforce:1.2,education:1.15,health:1.1,neighborhoods:1.05};
+const focusJobRates={workforce:0.008,education:0.005,health:0.007,neighborhoods:0.006};
+const focusPeopleRates={workforce:12,education:20,health:18,neighborhoods:15};
+
+function fmt(n){
+  if(n>=1000000)return'$'+(n/1000000).toFixed(2)+'M';
+  if(n>=1000)return'$'+(Math.round(n/1000))+'K';
+  return'$'+n.toLocaleString();
+}
+function fmtN(n){
+  if(n>=1000)return Math.round(n/100)*100+'+ people';
+  return Math.round(n)+' people';
+}
+
+function calculate(){
+  const donation=parseFloat(document.getElementById('donation').value)||0;
+  const sector=document.getElementById('sector').value;
+  const focus=document.querySelector('input[name=focus]:checked')?.value;
+  if(!donation||!sector||!focus){
+    document.getElementById('roiBadge').textContent='Complete all fields to calculate ↓';
+    ['economicReturn','jobsSupported','peopleReached','fiveYear','taxBenefit'].forEach(id=>document.getElementById(id).textContent='—');
+    return;
+  }
+  const mult=multipliers[sector]||3.2;
+  const fmult=focusMultipliers[focus]||1.1;
+  const economicReturn=donation*mult*fmult;
+  const jobs=Math.max(1,Math.round(donation*focusJobRates[focus]||0.006));
+  const people=Math.round(donation*(focusPeopleRates[focus]||15)/1000);
+  const fiveYear=economicReturn*5.8;
+  const tax=donation*0.37;
+  const roi=Math.round(((economicReturn-donation)/donation)*100);
+  document.getElementById('economicReturn').textContent=fmt(economicReturn);
+  document.getElementById('jobsSupported').textContent=jobs+(jobs===1?' position':' positions');
+  document.getElementById('peopleReached').textContent=fmtN(people);
+  document.getElementById('fiveYear').textContent=fmt(fiveYear);
+  document.getElementById('taxBenefit').textContent=fmt(tax)+' deduction';
+  document.getElementById('roiBadge').textContent=`~${roi}% ROI to the community`;
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{const fd=new FormData();fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');fd.append('subject','ROI Report Request – Impact Calculator');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-mini-btn').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openEmail(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ You\'ll receive investment updates from our team.</p>';
+}
+</script>
+</body>
+</html>

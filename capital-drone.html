@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Cleveland – Capital Projects – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0a0d10;color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0a0d10;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--tan)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--tan);color:var(--tan)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+
+/* HERO - cinematic */
+.hero-full{height:70vh;min-height:480px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0a0d10}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;opacity:0.6}
+.hero-bg-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 40% 60%,rgba(238,115,49,.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(26,141,169,.06) 0%,transparent 50%)}
+.hero-content{position:relative;text-align:center;padding:0 24px;max-width:820px}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--tan);margin-bottom:16px}
+.hero-h1{font-size:clamp(36px,6vw,72px);font-weight:700;line-height:1.05;letter-spacing:-.03em;margin-bottom:16px}
+.hero-h1 span{color:var(--orange)}
+.hero-p{font-size:18px;color:rgba(255,255,255,.5);line-height:1.6;max-width:560px;margin:0 auto 32px}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-btn-main{padding:15px 32px;background:var(--orange);border:none;border-radius:50px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.hero-btn-main:hover{background:#d4631f;transform:translateY(-2px)}
+.hero-btn-ghost{padding:14px 32px;background:transparent;border:1.5px solid rgba(255,255,255,.25);border-radius:50px;color:rgba(255,255,255,.75);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+.hero-btn-ghost:hover{border-color:rgba(255,255,255,.55);color:var(--white)}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:12px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scroll-arrow{animation:bounce 1.5s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* METRICS STRIP */
+.metrics-strip{background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:28px 20px}
+.metrics-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;text-align:center}
+.met-num{font-size:24px;font-weight:700;color:var(--orange);margin-bottom:4px}
+.met-label{font-size:11px;color:rgba(255,255,255,.4);line-height:1.3}
+
+/* PROJECTS GRID */
+.projects-section{max-width:1100px;margin:0 auto;padding:56px 20px 80px}
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{font-size:32px;font-weight:700;margin-bottom:8px}
+.section-header p{font-size:16px;color:rgba(255,255,255,.45);max-width:500px;margin:0 auto}
+
+.phase-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.phase-tab{padding:8px 20px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);background:transparent;transition:all .2s}
+.phase-tab:hover{background:rgba(255,255,255,.07)}
+.phase-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+
+.project-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;transition:all .25s;cursor:pointer}
+.project-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.project-visual{height:180px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.project-visual-deco{font-size:80px;opacity:.7;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5))}
+.project-phase-badge{position:absolute;top:14px;right:14px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.project-body{padding:20px}
+.project-neighborhood{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+.project-name{font-size:18px;font-weight:700;margin-bottom:6px;line-height:1.2}
+.project-desc{font-size:14px;color:rgba(255,255,255,.55);line-height:1.5;margin-bottom:14px}
+.project-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.project-investment{font-size:15px;font-weight:700;color:var(--orange)}
+.project-timeline{font-size:12px;color:rgba(255,255,255,.35)}
+.project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.project-tag{font-size:11px;padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5)}
+.project-support-btn{display:block;width:100%;padding:11px;background:rgba(238,115,49,.15);border:1.5px solid rgba(238,115,49,.35);border-radius:10px;color:var(--orange);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s}
+.project-support-btn:hover{background:var(--orange);color:#fff}
+
+/* PIPELINE */
+.pipeline-section{max-width:900px;margin:0 auto;padding:0 20px 80px}
+.pipeline-section h2{font-size:26px;font-weight:700;margin-bottom:24px;text-align:center}
+.pipeline-list{display:flex;flex-direction:column;gap:14px}
+.pipeline-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:16px}
+.pipeline-year{font-size:13px;font-weight:700;color:var(--orange);min-width:40px}
+.pipeline-info{flex:1}
+.pipeline-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.pipeline-detail{font-size:13px;color:rgba(255,255,255,.45)}
+.pipeline-amount{font-size:15px;font-weight:700;color:rgba(255,255,255,.6)}
+
+/* CTA */
+.cta-section{max-width:680px;margin:0 auto;padding:0 20px 80px;text-align:center}
+.cta-section h2{font-size:28px;font-weight:700;margin-bottom:10px}
+.cta-section p{font-size:16px;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:28px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.cta-main{padding:14px 28px;background:var(--orange);border:none;border-radius:50px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-main:hover{background:#d4631f}
+.cta-alt{padding:13px 28px;background:transparent;border:1.5px solid rgba(255,255,255,.2);border-radius:50px;color:rgba(255,255,255,.7);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-alt:hover{border-color:var(--tan);color:var(--tan)}
+.email-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px;max-width:420px;margin:0 auto}
+.email-box h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.email-box p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:14px}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:130px;padding:10px 12px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:14px;outline:none}
+.email-in:focus{border-color:var(--orange)}
+.email-in::placeholder{color:rgba(255,255,255,.25)}
+.email-sub{padding:10px 16px;border-radius:9px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub:hover{background:#d4631f}
+.email-ok{display:none;font-size:14px;color:var(--aqua);font-weight:600;text-align:center;padding:6px 0}
+
+@media(max-width:640px){
+  .site-nav{padding:14px 16px}
+  .nav-ctas .btn-ghost{display:none}
+  .hero-full{height:auto;min-height:420px;padding:80px 20px}
+  .metrics-inner{grid-template-columns:repeat(3,1fr)}
+  .metrics-inner .met-item:nth-child(4),.metrics-inner .met-item:nth-child(5){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero-full">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Construction &amp; Capital Projects · Cleveland Foundation</div>
+    <h1 class="hero-h1"><span>Build</span> Cleveland.<br>Watch it Rise.</h1>
+    <p class="hero-p">The Cleveland Foundation is investing in capital projects that transform neighborhoods, create jobs, and build the physical infrastructure for a thriving city.</p>
+    <div class="hero-ctas">
+      <a class="hero-btn-main" href="#projects">Explore Projects ↓</a>
+      <a class="hero-btn-ghost" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Partner With Us</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span class="scroll-arrow">↓</span></div>
+</section>
+
+<div class="metrics-strip">
+  <div class="metrics-inner">
+    <div class="met-item"><div class="met-num">$380M</div><div class="met-label">Capital investment pipeline 2024-2030</div></div>
+    <div class="met-item"><div class="met-num">47</div><div class="met-label">Active capital projects in Greater CLE</div></div>
+    <div class="met-item"><div class="met-num">12,400</div><div class="met-label">Construction jobs supported</div></div>
+    <div class="met-item"><div class="met-num">28</div><div class="met-label">Neighborhoods directly impacted</div></div>
+    <div class="met-item"><div class="met-num">2040</div><div class="met-label">Long-range capital vision horizon</div></div>
+  </div>
+</div>
+
+<section class="projects-section" id="projects">
+  <div class="section-header">
+    <h2>Capital Projects in Motion</h2>
+    <p>From community centers to waterfront development — here's what's being built.</p>
+  </div>
+
+  <div class="phase-tabs">
+    <button class="phase-tab active" onclick="filterProjects('all',this)">All Projects</button>
+    <button class="phase-tab" onclick="filterProjects('groundbreaking',this)">🏗️ Breaking Ground</button>
+    <button class="phase-tab" onclick="filterProjects('planning',this)">📐 In Planning</button>
+    <button class="phase-tab" onclick="filterProjects('complete',this)">✅ Complete</button>
+  </div>
+
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<section class="pipeline-section">
+  <h2>Capital Pipeline: 2025–2030</h2>
+  <div class="pipeline-list" id="pipelineList"></div>
+</section>
+
+<section class="cta-section">
+  <h2>Invest in What You'll Build</h2>
+  <p>The Cleveland Foundation connects philanthropic capital with transformative construction and community development projects across Greater Cleveland.</p>
+  <div class="cta-btns">
+    <a class="cta-main" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">🏗️ Fund a Capital Project</a>
+    <a class="cta-alt" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Partnership Info ↗</a>
+  </div>
+  <div class="email-box">
+    <h4>Stay Ahead of the Pipeline</h4>
+    <p>Receive project updates, partnership opportunities, and capital investment briefings.</p>
+    <div class="email-row">
+      <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+      <button class="email-sub" onclick="subEmail()">Get Updates</button>
+    </div>
+    <div class="email-ok" id="emailOk">✓ You're in the pipeline!</div>
+  </div>
+</section>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0a0d10;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Get capital project updates and partnership opportunities from the Cleveland Foundation.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="subject" value="Stay Connected – Capital Projects Page">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const projects=[
+  {phase:'groundbreaking',bg:'linear-gradient(135deg,#1A2A1A,#086C43)',deco:'🏗️',badgeColor:'rgba(25,185,169,.25)',badgeText:'Breaking Ground',badgeTxt:'var(--aqua)',neighborhood:'Glenville',name:'Glenville Youth Innovation Campus',desc:'A state-of-the-art 45,000 sq ft campus combining workforce training, STEM labs, and community gathering space. Designed to anchor Glenville\'s revitalization.',investment:'$42M',timeline:'Opens 2026',tags:['STEM','Workforce','Community']},
+  {phase:'groundbreaking',bg:'linear-gradient(135deg,#1A1A0A,#EE7331)',deco:'🌊',badgeColor:'rgba(238,115,49,.25)',badgeText:'Active Construction',badgeTxt:'var(--orange)',neighborhood:'Lakefront',name:'Lakefront Connector Trail Phase 2',desc:'Extending the lakefront trail system through downtown and connecting to the Towpath Trail — 3.2 miles of new riverfront path, bike lanes, and public green space.',investment:'$18M',timeline:'Complete Q3 2025',tags:['Trail','Waterfront','Transit']},
+  {phase:'planning',bg:'linear-gradient(135deg,#0A1A2A,#1A8DA9)',deco:'🏛️',badgeColor:'rgba(26,141,169,.25)',badgeText:'In Planning',badgeTxt:'var(--blue)',neighborhood:'University Circle',name:'Health Innovation District Hub',desc:'A mixed-use innovation campus connecting Cleveland Clinic, Case Western, and emerging health-tech startups in one physical ecosystem. Public-private $115M investment.',investment:'$115M',timeline:'Groundbreaking 2026',tags:['Health','Innovation','Anchor']},
+  {phase:'planning',bg:'linear-gradient(135deg,#1A0A0A,#CC1E4B)',deco:'🎭',badgeColor:'rgba(204,30,75,.25)',badgeText:'In Planning',badgeTxt:'var(--red)',neighborhood:'Ohio City',name:'Ohio City Arts + Market Hall',desc:'A reimagined public market hall combining food entrepreneurship, maker spaces, and performance venues — anchoring the West Side Market district for the next generation.',investment:'$28M',timeline:'Opening 2027',tags:['Arts','Food','Entrepreneurship']},
+  {phase:'complete',bg:'linear-gradient(135deg,#1A1A1A,#DBD5CA)',deco:'✅',badgeColor:'rgba(219,213,202,.2)',badgeText:'Complete',badgeTxt:'var(--tan)',neighborhood:'Tremont',name:'Tremont Community Gathering Space',desc:'A 8,000 sq ft community hub with meeting rooms, a commercial kitchen, and outdoor plaza, now hosting 200+ events annually and serving 15,000+ Tremont residents.',investment:'$6.5M',timeline:'Opened 2023',tags:['Community','Events','Neighborhood']},
+  {phase:'complete',bg:'linear-gradient(135deg,#0A1510,#19B9A9)',deco:'🌳',badgeColor:'rgba(25,185,169,.2)',badgeText:'Complete',badgeTxt:'var(--aqua)',neighborhood:'Clark-Fulton',name:'Clark-Fulton Green Infrastructure',desc:'50 acres of bioswales, permeable pavement, and green corridors that have reduced stormwater overflow by 60% — transforming an industrial district into a model of green urbanism.',investment:'$12M',timeline:'Completed 2024',tags:['Green','Infrastructure','Environment']}
+];
+
+const pipeline=[
+  {year:'2025',name:'Midtown Corridor Mixed-Use Phase 1',detail:'Housing + Retail · St. Clair-Superior',amount:'$35M'},
+  {year:'2026',name:'East Side Library Network Expansion',detail:'3 branches · Multiple neighborhoods',amount:'$8M'},
+  {year:'2026',name:'Cuyahoga River Recreation Access',detail:'Kayak launches + riverside trail',amount:'$4.5M'},
+  {year:'2027',name:'Euclid Corridor Transit-Oriented Dev.',detail:'500 units affordable housing · BRT alignment',amount:'$85M'},
+  {year:'2028',name:'South Side Recreation & Wellness Hub',detail:'Brookhaven · Sports + Health',amount:'$22M'},
+  {year:'2029',name:'Industrial Valley Innovation District',detail:'Clean manufacturing + workforce training',amount:'$60M'},
+  {year:'2030',name:'Greater Cleveland Greenway Completion',detail:'Final 12-mile trail segment',amount:'$15M'}
+];
+
+let currentFilter='all';
+
+function filterProjects(phase,btn){
+  currentFilter=phase;
+  document.querySelectorAll('.phase-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects();
+}
+
+function renderProjects(){
+  const grid=document.getElementById('projectsGrid');
+  const filtered=currentFilter==='all'?projects:projects.filter(p=>p.phase===currentFilter);
+  grid.innerHTML=filtered.map(p=>`<div class="project-card">
+    <div class="project-visual" style="background:${p.bg}">
+      <div class="project-visual-deco">${p.deco}</div>
+      <div class="project-phase-badge" style="background:${p.badgeColor};color:${p.badgeTxt}">${p.badgeText}</div>
+    </div>
+    <div class="project-body">
+      <div class="project-neighborhood">${p.neighborhood}</div>
+      <div class="project-name">${p.name}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-meta">
+        <span class="project-investment">${p.investment}</span>
+        <span class="project-timeline">${p.timeline}</span>
+      </div>
+      <div class="project-tags">${p.tags.map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
+      <a class="project-support-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Fund This Project →</a>
+    </div>
+  </div>`).join('');
+}
+
+function renderPipeline(){
+  document.getElementById('pipelineList').innerHTML=pipeline.map(p=>`
+    <div class="pipeline-item">
+      <div class="pipeline-year">${p.year}</div>
+      <div class="pipeline-info">
+        <div class="pipeline-name">${p.name}</div>
+        <div class="pipeline-detail">${p.detail}</div>
+      </div>
+      <div class="pipeline-amount">${p.amount}</div>
+    </div>`).join('');
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{const fd=new FormData();fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');fd.append('subject','Capital Pipeline Update – Construction Companies');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openEmail(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ You\'re in the pipeline!</p>';
+}
+
+renderProjects();
+renderPipeline();
+</script>
+</body>
+</html>
