@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Kind of Educator Are You? | The Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;
+  --aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;
+  --tan:#DBD5CA;--white:#F3F1EF;
+  --font:'Source Sans 3','Source Sans Pro',sans-serif;
+  --radius:14px;--trans:0.18s ease;
+}
+body{font-family:var(--font);background:var(--green);color:#fff;min-height:100vh}
+canvas#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* NAV */
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.1)}
+.nav-back{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:6px;transition:color var(--trans)}
+.nav-back:hover{color:#fff}
+.nav-actions{display:flex;gap:10px}
+.nav-btn{padding:7px 16px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;text-decoration:none;transition:all var(--trans)}
+.nav-btn.ghost{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.ghost:hover{background:rgba(255,255,255,.22)}
+.nav-btn.accent{background:var(--orange);color:#fff}
+.nav-btn.accent:hover{background:#d4621f}
+
+.quiz-root{max-width:700px;margin:0 auto;padding:2rem 1.25rem 3rem}
+
+/* LOGO */
+.logo-bar{text-align:center;margin-bottom:2rem}
+.logo-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);border-radius:50px;padding:8px 20px}
+.logo-dot{width:9px;height:9px;border-radius:50%;background:var(--orange);flex-shrink:0}
+.logo-text{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+
+/* SCREENS */
+.screen{display:none;animation:fadeUp .35s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* INTRO */
+.intro-hero{text-align:center;padding:2rem 0}
+.intro-tag{display:inline-block;background:rgba(238,115,49,.2);color:var(--orange);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:50px;margin-bottom:1rem}
+.intro-title{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+.intro-sub{font-size:1.1rem;color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 2rem}
+.start-btn{display:inline-block;background:var(--orange);color:#fff;font-size:1rem;font-weight:700;padding:14px 36px;border-radius:50px;border:none;cursor:pointer;transition:all var(--trans);text-decoration:none}
+.start-btn:hover{background:#d4621f;transform:translateY(-2px)}
+.archetype-teaser{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:2.5rem}
+.archetype-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px;text-align:center}
+.archetype-chip .icon{font-size:1.8rem;margin-bottom:6px}
+.archetype-chip .name{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.9)}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-label{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(255,255,255,.6);margin-bottom:6px}
+.progress-bar{height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:3px;transition:width .4s ease}
+.step-dots{display:flex;gap:5px;justify-content:center;margin-top:8px}
+.step-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.step-dot.done{background:var(--orange)}
+.step-dot.active{background:#fff;transform:scale(1.3)}
+
+/* QUESTION CARD */
+.q-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:2rem}
+.q-num{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem}
+.q-text{font-size:1.25rem;font-weight:700;line-height:1.4;margin-bottom:1.5rem}
+.answers{display:grid;gap:10px}
+.ans-btn{width:100%;text-align:left;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 18px;color:#fff;font-family:var(--font);font-size:.95rem;cursor:pointer;transition:all var(--trans);display:flex;align-items:center;gap:12px}
+.ans-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);transform:translateX(4px)}
+.ans-btn.selected{background:rgba(238,115,49,.2);border-color:var(--orange)}
+.ans-letter{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.next-btn{margin-top:1.5rem;width:100%;background:var(--orange);color:#fff;font-size:1rem;font-weight:700;padding:14px;border-radius:10px;border:none;cursor:pointer;transition:all var(--trans);opacity:.4;pointer-events:none}
+.next-btn.enabled{opacity:1;pointer-events:auto}
+.next-btn.enabled:hover{background:#d4621f}
+
+/* RESULT */
+.result-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1.5rem}
+.result-badge{font-size:3.5rem;margin-bottom:.5rem}
+.result-label{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem}
+.result-title{font-size:2rem;font-weight:800;margin-bottom:.75rem}
+.result-desc{color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.5rem}
+.trait-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem}
+.trait-card{background:rgba(255,255,255,.07);border-radius:10px;padding:12px;text-align:left}
+.trait-card .t-icon{font-size:1.4rem;margin-bottom:4px}
+.trait-card .t-name{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.9)}
+.score-bars{margin-bottom:1.5rem}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem}
+.score-label{width:130px;text-align:right;color:rgba(255,255,255,.7)}
+.score-track{flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
+.score-fill{height:100%;background:var(--orange);border-radius:4px;transition:width 1s ease}
+
+/* CTAs */
+.cta-section{display:grid;gap:14px;margin-bottom:1.5rem}
+.cta-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:1.5rem;text-align:center}
+.cta-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.cta-card p{font-size:.88rem;color:rgba(255,255,255,.7);margin-bottom:1rem}
+.cta-btn-donate{display:block;background:var(--orange);color:#fff;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:.95rem;transition:all var(--trans)}
+.cta-btn-donate:hover{background:#d4621f}
+.email-row{display:flex;gap:8px}
+.email-input{flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:8px;padding:11px 14px;color:#fff;font-family:var(--font);font-size:.9rem;outline:none;transition:border var(--trans)}
+.email-input::placeholder{color:rgba(255,255,255,.4)}
+.email-input:focus{border-color:var(--orange)}
+.email-submit{background:var(--mid);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-weight:700;cursor:pointer;font-size:.9rem;transition:all var(--trans);white-space:nowrap}
+.email-submit:hover{background:var(--aqua)}
+.email-success{color:var(--aqua);font-size:.9rem;font-weight:600;display:none;margin-top:.5rem}
+.secondary-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sec-btn{padding:10px 22px;border-radius:50px;font-size:.85rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#fff;text-decoration:none;transition:all var(--trans)}
+.sec-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+
+/* EMAIL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity var(--trans)}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-box{background:#1a5238;border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:2rem;max-width:400px;width:100%;transform:scale(.95);transition:transform var(--trans)}
+.modal-overlay.open .modal-box{transform:scale(1)}
+.modal-close{float:right;background:none;border:none;color:rgba(255,255,255,.6);font-size:1.4rem;cursor:pointer;line-height:1}
+.modal-title{font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
+.modal-sub{font-size:.9rem;color:rgba(255,255,255,.7);margin-bottom:1.25rem}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a href="hub.html" class="nav-back">← All Experiences</a>
+  <div class="nav-actions">
+    <button class="nav-btn ghost" onclick="openModal()">Stay Connected</button>
+    <a href="https://donate.stripe.com/5kQ00jgrr0H45wm2H24c81N" target="_blank" class="nav-btn accent">Donate Today</a>
+  </div>
+</nav>
+
+<div class="quiz-root">
+  <div class="logo-bar">
+    <div class="logo-badge">
+      <div class="logo-dot"></div>
+      <span class="logo-text">The Cleveland Foundation</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-hero">
+      <div class="intro-tag">For Educators</div>
+      <h1 class="intro-title">What Kind of Educator Are You?</h1>
+      <p class="intro-sub">10 questions to discover your teaching archetype — and how your passion shapes Cleveland's next generation.</p>
+      <button class="start-btn" onclick="startQuiz()">Take the Quiz →</button>
+      <div class="archetype-teaser">
+        <div class="archetype-chip"><div class="icon">🌱</div><div class="name">The Cultivator</div></div>
+        <div class="archetype-chip"><div class="icon">🔭</div><div class="name">The Innovator</div></div>
+        <div class="archetype-chip"><div class="icon">🛡️</div><div class="name">The Advocate</div></div>
+        <div class="archetype-chip"><div class="icon">🤝</div><div class="name">The Connector</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="screen" id="screen-question">
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="q-counter">Question 1 of 10</span><span id="q-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="step-dots" id="step-dots"></div>
+    </div>
+    <div class="q-card">
+      <div class="q-num" id="q-num">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="answers" id="answers"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-card">
+      <div class="result-badge" id="r-badge"></div>
+      <div class="result-label">Your Educator Archetype</div>
+      <div class="result-title" id="r-title"></div>
+      <div class="result-desc" id="r-desc"></div>
+      <div class="trait-grid" id="r-traits"></div>
+    </div>
+    <div class="score-bars" id="score-bars"></div>
+    <div class="cta-section">
+      <div class="cta-card">
+        <h3>Support Great Educators in Cleveland</h3>
+        <p>Your gift invests directly in the People to Prosperity fund — building pathways from the classroom to opportunity.</p>
+        <a href="https://donate.stripe.com/5kQ00jgrr0H45wm2H24c81N" target="_blank" class="cta-btn-donate">Donate Today →</a>
+      </div>
+      <div class="cta-card">
+        <h3>Keep in Touch & See How We Support Educators</h3>
+        <p>Receive updates on how the Cleveland Foundation is investing in teachers and students across our city.</p>
+        <div class="email-row">
+          <input type="email" id="result-email" class="email-input" placeholder="your@email.com">
+          <button class="email-submit" onclick="submitEmail('result-email','result-email-success')">Stay Connected</button>
+        </div>
+        <div class="email-success" id="result-email-success">✓ You're connected! Watch your inbox.</div>
+      </div>
+    </div>
+    <div class="secondary-actions">
+      <button class="sec-btn" onclick="retakeQuiz()">↺ Take Again</button>
+      <a href="https://www.clevelandfoundation.org/" target="_blank" class="sec-btn">Visit Cleveland Foundation →</a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">Stay in the Loop</div>
+    <div class="modal-sub">Get updates on how the Cleveland Foundation supports educators and students across Greater Cleveland.</div>
+    <div class="email-row">
+      <input type="email" id="modal-email" class="email-input" placeholder="your@email.com">
+      <button class="email-submit" onclick="submitEmail('modal-email','modal-email-success')">Subscribe</button>
+    </div>
+    <div class="email-success" id="modal-email-success">✓ You're connected!</div>
+  </div>
+</div>
+
+<script>
+const ARCHETYPES = {
+  cultivator:{label:'The Cultivator',badge:'🌱',desc:'You lead with patience and relationship. You believe every student has a seed of potential waiting for the right conditions — and you dedicate your craft to creating that safe, nurturing environment where growth is inevitable.',traits:[{icon:'🌿',name:'Nurturing'},{icon:'💬',name:'Empathetic'},{icon:'⏳',name:'Patient'},{icon:'🏡',name:'Community-Minded'}]},
+  innovator:{label:'The Innovator',badge:'🔭',desc:'You thrive at the edge of what\'s possible. You bring technology, project-based learning, and creative thinking into your classroom — inspiring students to question, create, and lead in a changing world.',traits:[{icon:'💡',name:'Creative'},{icon:'🚀',name:'Forward-Thinking'},{icon:'🔬',name:'Experimental'},{icon:'📱',name:'Tech-Savvy'}]},
+  advocate:{label:'The Advocate',badge:'🛡️',desc:'You see education as justice. You champion resources, representation, and reform — both inside your classroom and in the broader system — because you believe every child deserves a world-class education regardless of zip code.',traits:[{icon:'⚖️',name:'Equity-Focused'},{icon:'📣',name:'Outspoken'},{icon:'💪',name:'Persistent'},{icon:'🌍',name:'Systemic Thinker'}]},
+  connector:{label:'The Connector',badge:'🤝',desc:'You understand that education happens everywhere — in partnerships, in community, in relationships between school and home. You build bridges between students, families, local organizations, and the wider world.',traits:[{icon:'🔗',name:'Network Builder'},{icon:'🤲',name:'Collaborative'},{icon:'🏙️',name:'Community-Rooted'},{icon:'🎯',name:'Purpose-Driven'}]}
+};
+
+const QUESTIONS = [
+  {text:'A student is consistently disengaged. Your first move is to:',answers:[{text:'Have a quiet 1-on-1 conversation to understand their world',type:'cultivator'},{text:'Design a project that connects the curriculum to their interests',type:'innovator'},{text:'Investigate systemic barriers that may be affecting them',type:'advocate'},{text:'Reach out to their family and community for context',type:'connector'}]},
+  {text:'The most important outcome of a great education is:',answers:[{text:'A student who believes in themselves and feels seen',type:'cultivator'},{text:'A student who can think critically and adapt to change',type:'innovator'},{text:'A student who understands and can navigate systemic inequity',type:'advocate'},{text:'A student who contributes meaningfully to their community',type:'connector'}]},
+  {text:'You have extra budget for your classroom. You spend it on:',answers:[{text:'Comfortable seating and calming tools that reduce anxiety',type:'cultivator'},{text:'Maker materials, tech tools, or creative kits',type:'innovator'},{text:'Books and resources that represent diverse voices and histories',type:'advocate'},{text:'A guest speaker series featuring local community leaders',type:'connector'}]},
+  {text:'A new education policy is announced you disagree with. You:',answers:[{text:'Focus energy on shielding your students from its worst effects',type:'cultivator'},{text:'Look for innovative workarounds that still serve students well',type:'innovator'},{text:'Organize with colleagues to formally push back',type:'advocate'},{text:'Connect with parent groups and community orgs to build coalition',type:'connector'}]},
+  {text:'Your classroom philosophy is closest to:',answers:[{text:'"Every student is capable of extraordinary things if given the right conditions."',type:'cultivator'},{text:'"Learning should look like curiosity, not compliance."',type:'innovator'},{text:'"Education is a civil right — and I will fight for it."',type:'advocate'},{text:'"No student succeeds alone. School is part of a larger ecosystem."',type:'connector'}]},
+  {text:'A parent is frustrated about their child\'s progress. You:',answers:[{text:'Listen first, validate their concern, and reassure them you\'re in this together',type:'cultivator'},{text:'Share the specific learning approaches you\'re using and why',type:'innovator'},{text:'Acknowledge structural barriers and discuss what more support could look like',type:'advocate'},{text:'Invite them into the classroom and explore how to co-create the solution',type:'connector'}]},
+  {text:'After a difficult school week, you recharge by:',answers:[{text:'Reflecting on small wins — a breakthrough moment with a student',type:'cultivator'},{text:'Exploring a new teaching method or tool you\'re excited to try',type:'innovator'},{text:'Reading or listening to voices working on education equity',type:'advocate'},{text:'Catching up with a colleague, mentor, or community partner',type:'connector'}]},
+  {text:'The most undervalued skill in education today is:',answers:[{text:'Emotional attunement — knowing where each student truly is',type:'cultivator'},{text:'Adaptability — staying effective in a rapidly changing world',type:'innovator'},{text:'Courage — naming injustice and demanding better for all students',type:'advocate'},{text:'Relationship-building — with families, neighborhoods, and institutions',type:'connector'}]},
+  {text:'A colleague asks your advice on a struggling class. You suggest:',answers:[{text:'Slow down, build safety, and let students set the pace',type:'cultivator'},{text:'Redesign one lesson as a hands-on challenge and see what sparks',type:'innovator'},{text:'Look at which students are being left behind and why — then address root causes',type:'advocate'},{text:'Bring in a community expert or mentorship connection',type:'connector'}]},
+  {text:'Your proudest teaching moment would be:',answers:[{text:'A withdrawn student finally opens up and trusts the classroom',type:'cultivator'},{text:'A student pitches an idea that surprises even you with its brilliance',type:'innovator'},{text:'A student advocates for themselves or others in a powerful way',type:'advocate'},{text:'A student uses something from class to make a real difference in their neighborhood',type:'connector'}]}
+];
+
+let currentQ = 0, scores = {cultivator:0,innovator:0,advocate:0,connector:0}, selected = null;
+
+function startQuiz(){
+  showScreen('screen-question');
+  buildDots();
+  renderQuestion();
+}
+
+function buildDots(){
+  const c = document.getElementById('step-dots');
+  c.innerHTML = QUESTIONS.map((_,i)=>`<div class="step-dot" id="dot-${i}"></div>`).join('');
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[currentQ];
+  document.getElementById('q-counter').textContent=`Question ${currentQ+1} of ${QUESTIONS.length}`;
+  const pct = Math.round((currentQ/QUESTIONS.length)*100);
+  document.getElementById('q-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('q-num').textContent=`Question ${currentQ+1}`;
+  document.getElementById('q-text').textContent=q.text;
+  QUESTIONS.forEach((_,i)=>{
+    const d=document.getElementById(`dot-${i}`);
+    d.className='step-dot'+(i<currentQ?' done':i===currentQ?' active':'');
+  });
+  const letters=['A','B','C','D'];
+  document.getElementById('answers').innerHTML=q.answers.map((a,i)=>`
+    <button class="ans-btn" onclick="selectAnswer(${i},'${a.type}')">
+      <span class="ans-letter">${letters[i]}</span>
+      <span>${a.text}</span>
+    </button>`).join('');
+  const nb=document.getElementById('next-btn');
+  nb.textContent=currentQ===QUESTIONS.length-1?'See My Results →':'Next →';
+  nb.className='next-btn';
+  selected=null;
+}
+
+function selectAnswer(idx,type){
+  document.querySelectorAll('.ans-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.ans-btn')[idx].classList.add('selected');
+  selected=type;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function nextQuestion(){
+  if(!selected)return;
+  scores[selected]++;
+  if(currentQ<QUESTIONS.length-1){
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  const top=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+  const a=ARCHETYPES[top];
+  document.getElementById('r-badge').textContent=a.badge;
+  document.getElementById('r-title').textContent=a.label;
+  document.getElementById('r-desc').textContent=a.desc;
+  document.getElementById('r-traits').innerHTML=a.traits.map(t=>`<div class="trait-card"><div class="t-icon">${t.icon}</div><div class="t-name">${t.name}</div></div>`).join('');
+  const total=QUESTIONS.length;
+  const order=['cultivator','innovator','advocate','connector'];
+  document.getElementById('score-bars').innerHTML=order.map(k=>`
+    <div class="score-row">
+      <div class="score-label">${ARCHETYPES[k].label}</div>
+      <div class="score-track"><div class="score-fill" style="width:0%" data-pct="${Math.round((scores[k]/total)*100)}%"></div></div>
+    </div>`).join('');
+  showScreen('screen-result');
+  setTimeout(()=>{document.querySelectorAll('.score-fill').forEach(el=>{el.style.width=el.dataset.pct})},200);
+  launchConfetti();
+}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function retakeQuiz(){scores={cultivator:0,innovator:0,advocate:0,connector:0};currentQ=0;selected=null;showScreen('screen-intro')}
+
+async function submitEmail(inputId,successId){
+  const email=document.getElementById(inputId).value.trim();
+  if(!email||!email.includes('@'))return;
+  const btn=document.querySelector(`#${inputId}`).nextElementSibling;
+  btn.textContent='Sending…';btn.disabled=true;
+  try{
+    const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({access_key:'703d8f42-6326-4ee0-ae37-42a0b5d74e35',subject:'TCF Educators Quiz – Stay Connected',email,page:'teaching-style-quiz'})});
+    if(r.ok){document.getElementById(successId).style.display='block';document.getElementById(inputId).value='';btn.textContent='✓ Done';}
+    else throw new Error();
+  }catch{btn.textContent='Try Again';btn.disabled=false;}
+}
+
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal()}
+
+function launchConfetti(){
+  const canvas=document.getElementById('confetti-canvas');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const colors=['#EE7331','#C0629A','#19B9A9','#1A8DA9','#086C43','#FFFFFF','#DBD5CA'];
+  const pieces=Array.from({length:160},()=>({x:Math.random()*canvas.width,y:-20-Math.random()*200,w:6+Math.random()*8,h:10+Math.random()*14,color:colors[Math.floor(Math.random()*colors.length)],rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-.5)*.15,vx:(Math.random()-.5)*3,vy:2.5+Math.random()*4,opacity:1}));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive=false;
+    pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotSpeed;if(p.y>canvas.height*.7)p.opacity-=.015;if(p.opacity>0&&p.y<canvas.height+20){alive=true;ctx.save();ctx.globalAlpha=Math.max(0,p.opacity);ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}});
+    frame++;if(alive&&frame<300)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>

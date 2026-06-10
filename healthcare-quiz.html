@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Kind of Healthcare Professional Are You? | The Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;
+  --aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;
+  --tan:#DBD5CA;--white:#F3F1EF;
+  --font:'Source Sans 3','Source Sans Pro',sans-serif;
+  --radius:14px;--trans:0.18s ease;
+}
+body{font-family:var(--font);background:#0d3b5e;color:#fff;min-height:100vh}
+canvas#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* NAV */
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.1)}
+.nav-back{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:6px;transition:color var(--trans)}
+.nav-back:hover{color:#fff}
+.nav-actions{display:flex;gap:10px}
+.nav-btn{padding:7px 16px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;text-decoration:none;transition:all var(--trans)}
+.nav-btn.ghost{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.ghost:hover{background:rgba(255,255,255,.22)}
+.nav-btn.accent{background:var(--aqua);color:#fff}
+.nav-btn.accent:hover{background:#12a090}
+
+.quiz-root{max-width:700px;margin:0 auto;padding:2rem 1.25rem 3rem}
+.logo-bar{text-align:center;margin-bottom:2rem}
+.logo-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);border-radius:50px;padding:8px 20px}
+.logo-dot{width:9px;height:9px;border-radius:50%;background:var(--aqua);flex-shrink:0}
+.logo-text{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+
+.screen{display:none;animation:fadeUp .35s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.intro-hero{text-align:center;padding:2rem 0}
+.intro-tag{display:inline-block;background:rgba(25,185,169,.2);color:var(--aqua);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:50px;margin-bottom:1rem}
+.intro-title{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+.intro-sub{font-size:1.1rem;color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 2rem}
+.start-btn{display:inline-block;background:var(--aqua);color:#fff;font-size:1rem;font-weight:700;padding:14px 36px;border-radius:50px;border:none;cursor:pointer;transition:all var(--trans);text-decoration:none}
+.start-btn:hover{background:#12a090;transform:translateY(-2px)}
+.archetype-teaser{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:2.5rem}
+.archetype-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px;text-align:center}
+.archetype-chip .icon{font-size:1.8rem;margin-bottom:6px}
+.archetype-chip .name{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.9)}
+
+.progress-wrap{margin-bottom:1.5rem}
+.progress-label{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(255,255,255,.6);margin-bottom:6px}
+.progress-bar{height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--aqua);border-radius:3px;transition:width .4s ease}
+.step-dots{display:flex;gap:5px;justify-content:center;margin-top:8px}
+.step-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.step-dot.done{background:var(--aqua)}
+.step-dot.active{background:#fff;transform:scale(1.3)}
+
+.q-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:2rem}
+.q-num{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--aqua);margin-bottom:.5rem}
+.q-text{font-size:1.25rem;font-weight:700;line-height:1.4;margin-bottom:1.5rem}
+.answers{display:grid;gap:10px}
+.ans-btn{width:100%;text-align:left;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 18px;color:#fff;font-family:var(--font);font-size:.95rem;cursor:pointer;transition:all var(--trans);display:flex;align-items:center;gap:12px}
+.ans-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);transform:translateX(4px)}
+.ans-btn.selected{background:rgba(25,185,169,.2);border-color:var(--aqua)}
+.ans-letter{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.next-btn{margin-top:1.5rem;width:100%;background:var(--aqua);color:#fff;font-size:1rem;font-weight:700;padding:14px;border-radius:10px;border:none;cursor:pointer;transition:all var(--trans);opacity:.4;pointer-events:none}
+.next-btn.enabled{opacity:1;pointer-events:auto}
+.next-btn.enabled:hover{background:#12a090}
+
+.result-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1.5rem}
+.result-badge{font-size:3.5rem;margin-bottom:.5rem}
+.result-label{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--aqua);margin-bottom:.5rem}
+.result-title{font-size:2rem;font-weight:800;margin-bottom:.75rem}
+.result-desc{color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.5rem}
+.trait-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem}
+.trait-card{background:rgba(255,255,255,.07);border-radius:10px;padding:12px;text-align:left}
+.trait-card .t-icon{font-size:1.4rem;margin-bottom:4px}
+.trait-card .t-name{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.9)}
+.score-bars{margin-bottom:1.5rem}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem}
+.score-label{width:140px;text-align:right;color:rgba(255,255,255,.7)}
+.score-track{flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
+.score-fill{height:100%;background:var(--aqua);border-radius:4px;transition:width 1s ease}
+
+.cta-section{display:grid;gap:14px;margin-bottom:1.5rem}
+.cta-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:1.5rem;text-align:center}
+.cta-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.cta-card p{font-size:.88rem;color:rgba(255,255,255,.7);margin-bottom:1rem}
+.cta-btn-donate{display:block;background:var(--aqua);color:#fff;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:.95rem;transition:all var(--trans)}
+.cta-btn-donate:hover{background:#12a090}
+.email-row{display:flex;gap:8px}
+.email-input{flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:8px;padding:11px 14px;color:#fff;font-family:var(--font);font-size:.9rem;outline:none;transition:border var(--trans)}
+.email-input::placeholder{color:rgba(255,255,255,.4)}
+.email-input:focus{border-color:var(--aqua)}
+.email-submit{background:var(--mid);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-weight:700;cursor:pointer;font-size:.9rem;transition:all var(--trans);white-space:nowrap}
+.email-submit:hover{background:var(--aqua)}
+.email-success{color:var(--aqua);font-size:.9rem;font-weight:600;display:none;margin-top:.5rem}
+.secondary-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sec-btn{padding:10px 22px;border-radius:50px;font-size:.85rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#fff;text-decoration:none;transition:all var(--trans)}
+.sec-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity var(--trans)}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-box{background:#0d3b5e;border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:2rem;max-width:400px;width:100%;transform:scale(.95);transition:transform var(--trans)}
+.modal-overlay.open .modal-box{transform:scale(1)}
+.modal-close{float:right;background:none;border:none;color:rgba(255,255,255,.6);font-size:1.4rem;cursor:pointer;line-height:1}
+.modal-title{font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
+.modal-sub{font-size:.9rem;color:rgba(255,255,255,.7);margin-bottom:1.25rem}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<nav class="top-nav">
+  <a href="hub.html" class="nav-back">← All Experiences</a>
+  <div class="nav-actions">
+    <button class="nav-btn ghost" onclick="openModal()">Stay Connected</button>
+    <a href="https://donate.stripe.com/3cI8wP8YZ3Tg2ka2H24c81Y" target="_blank" class="nav-btn accent">Donate Today</a>
+  </div>
+</nav>
+
+<div class="quiz-root">
+  <div class="logo-bar">
+    <div class="logo-badge">
+      <div class="logo-dot"></div>
+      <span class="logo-text">The Cleveland Foundation</span>
+    </div>
+  </div>
+
+  <div class="screen active" id="screen-intro">
+    <div class="intro-hero">
+      <div class="intro-tag">For Healthcare Professionals</div>
+      <h1 class="intro-title">What Kind of Healthcare Professional Are You?</h1>
+      <p class="intro-sub">10 questions to reveal your care archetype — and how your work shapes the well-being of Greater Cleveland.</p>
+      <button class="start-btn" onclick="startQuiz()">Take the Quiz →</button>
+      <div class="archetype-teaser">
+        <div class="archetype-chip"><div class="icon">🔬</div><div class="name">The Diagnostician</div></div>
+        <div class="archetype-chip"><div class="icon">🤝</div><div class="name">The Caregiver</div></div>
+        <div class="archetype-chip"><div class="icon">🏥</div><div class="name">The Team Builder</div></div>
+        <div class="archetype-chip"><div class="icon">🛡️</div><div class="name">The Advocate</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-question">
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="q-counter">Question 1 of 10</span><span id="q-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="step-dots" id="step-dots"></div>
+    </div>
+    <div class="q-card">
+      <div class="q-num" id="q-num">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="answers" id="answers"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-result">
+    <div class="result-card">
+      <div class="result-badge" id="r-badge"></div>
+      <div class="result-label">Your Care Archetype</div>
+      <div class="result-title" id="r-title"></div>
+      <div class="result-desc" id="r-desc"></div>
+      <div class="trait-grid" id="r-traits"></div>
+    </div>
+    <div class="score-bars" id="score-bars"></div>
+    <div class="cta-section">
+      <div class="cta-card">
+        <h3>Support Health & Well-Being in Greater Cleveland</h3>
+        <p>Your gift directly funds the Cleveland Foundation's Well-Being initiatives — expanding access to care across every neighborhood.</p>
+        <a href="https://donate.stripe.com/3cI8wP8YZ3Tg2ka2H24c81Y" target="_blank" class="cta-btn-donate">Donate Today →</a>
+      </div>
+      <div class="cta-card">
+        <h3>Stay Connected to Cleveland's Health Community</h3>
+        <p>Get updates on how the Cleveland Foundation is investing in health equity and human services across our region.</p>
+        <div class="email-row">
+          <input type="email" id="result-email" class="email-input" placeholder="your@email.com">
+          <button class="email-submit" onclick="submitEmail('result-email','result-email-success')">Stay Connected</button>
+        </div>
+        <div class="email-success" id="result-email-success">✓ You're connected! Watch your inbox.</div>
+      </div>
+    </div>
+    <div class="secondary-actions">
+      <button class="sec-btn" onclick="retakeQuiz()">↺ Take Again</button>
+      <a href="https://www.clevelandfoundation.org/" target="_blank" class="sec-btn">Visit Cleveland Foundation →</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">Stay in the Loop</div>
+    <div class="modal-sub">Get updates on how the Cleveland Foundation is investing in health equity and well-being across Greater Cleveland.</div>
+    <div class="email-row">
+      <input type="email" id="modal-email" class="email-input" placeholder="your@email.com">
+      <button class="email-submit" onclick="submitEmail('modal-email','modal-email-success')">Subscribe</button>
+    </div>
+    <div class="email-success" id="modal-email-success">✓ You're connected!</div>
+  </div>
+</div>
+
+<script>
+const ARCHETYPES = {
+  diagnostician:{label:'The Diagnostician',badge:'🔬',desc:'You are driven by precision and evidence. You believe the best care starts with the right question — and you excel at cutting through noise to uncover root causes, patterns, and pathways to healing.',traits:[{icon:'🧠',name:'Analytical'},{icon:'📊',name:'Data-Driven'},{icon:'🔍',name:'Detail-Oriented'},{icon:'⚡',name:'Decisive'}]},
+  caregiver:{label:'The Caregiver',badge:'🤝',desc:'You lead with your heart. You see the whole person — not just the diagnosis — and your presence alone is healing. Patients trust you because you listen, you stay, and you genuinely care.',traits:[{icon:'💛',name:'Compassionate'},{icon:'👂',name:'Active Listener'},{icon:'🌸',name:'Patient-Centered'},{icon:'🤲',name:'Empathetic'}]},
+  teambuilder:{label:'The Team Builder',badge:'🏥',desc:'You understand that great care is never delivered alone. You coordinate, communicate, and build systems that allow entire teams to perform at their best — creating environments where patients and staff both thrive.',traits:[{icon:'🔗',name:'Collaborative'},{icon:'📋',name:'Systems-Thinker'},{icon:'🗣️',name:'Communicator'},{icon:'⚙️',name:'Process-Oriented'}]},
+  advocate:{label:'The Advocate',badge:'🛡️',desc:'You fight for health equity. You understand that zip code, income, and race shape health outcomes — and you refuse to accept a two-tiered system. You push institutions, policies, and communities toward justice.',traits:[{icon:'⚖️',name:'Equity-Focused'},{icon:'📣',name:'Voice for the Voiceless'},{icon:'💪',name:'Persistent'},{icon:'🌍',name:'Community-Rooted'}]}
+};
+
+const QUESTIONS = [
+  {text:'A new patient arrives with a complex, unclear presentation. Your instinct is to:',answers:[{text:'Systematically rule out every possibility before drawing conclusions',type:'diagnostician'},{text:'Sit with them, ask about their life, and listen for what\'s beneath the symptoms',type:'caregiver'},{text:'Immediately loop in the right specialists and coordinate a team approach',type:'teambuilder'},{text:'Ask about their living situation, access to food, and social determinants',type:'advocate'}]},
+  {text:'The most meaningful part of your work is:',answers:[{text:'Solving a medical puzzle no one else could crack',type:'diagnostician'},{text:'Watching a patient go from scared to hopeful because you were present',type:'caregiver'},{text:'A perfectly orchestrated care handoff that protects the patient',type:'teambuilder'},{text:'Knowing the care you provided reached someone who otherwise would have gone without',type:'advocate'}]},
+  {text:'Your colleagues most often come to you for:',answers:[{text:'Your clinical expertise and sharp diagnostic instincts',type:'diagnostician'},{text:'Emotional grounding when the team is overwhelmed',type:'caregiver'},{text:'Help organizing a complex multi-team situation',type:'teambuilder'},{text:'Insight on how policy or systemic issues are affecting patient populations',type:'advocate'}]},
+  {text:'A patient can\'t afford their prescribed medication. You:',answers:[{text:'Research clinical alternatives that achieve the same outcome',type:'diagnostician'},{text:'Spend extra time walking them through every option and offer emotional support',type:'caregiver'},{text:'Coordinate with social work, pharmacy, and billing to find a solution',type:'teambuilder'},{text:'Document it as a systemic failure and push for change at the institutional level',type:'advocate'}]},
+  {text:'Your view on technology in healthcare is:',answers:[{text:'A game-changer — better data means better diagnoses',type:'diagnostician'},{text:'Useful, but nothing replaces the human connection',type:'caregiver'},{text:'Most valuable when it helps teams communicate and coordinate better',type:'teambuilder'},{text:'Only meaningful if it improves access for underserved populations',type:'advocate'}]},
+  {text:'You learn a new clinical protocol is being implemented poorly. You:',answers:[{text:'Analyze the data and make a detailed evidence-based case for adjusting it',type:'diagnostician'},{text:'Talk to frontline staff about how it\'s affecting patients\' experiences',type:'caregiver'},{text:'Volunteer to lead the cross-functional team that fixes the rollout',type:'teambuilder'},{text:'Raise concerns about which patient populations are being disproportionately impacted',type:'advocate'}]},
+  {text:'Your ideal healthcare system would prioritize:',answers:[{text:'Precision medicine — exactly the right treatment for each individual',type:'diagnostician'},{text:'Humanizing care — every patient treated with dignity and warmth',type:'caregiver'},{text:'Integration — seamless coordination across every touchpoint',type:'teambuilder'},{text:'Equity — eliminating disparities in access and outcomes',type:'advocate'}]},
+  {text:'After a particularly tough day, you process it by:',answers:[{text:'Reviewing the case to understand what you could learn from it',type:'diagnostician'},{text:'Talking with a trusted colleague about the emotional weight',type:'caregiver'},{text:'Debriefing with your team to see how you can improve next time',type:'teambuilder'},{text:'Channeling the frustration into advocacy or system change work',type:'advocate'}]},
+  {text:'A junior colleague is burning out. Your response is to:',answers:[{text:'Help them build better diagnostic frameworks to reduce cognitive load',type:'diagnostician'},{text:'Check in regularly and prioritize their emotional wellbeing',type:'caregiver'},{text:'Work with leadership to reduce structural bottlenecks causing the strain',type:'teambuilder'},{text:'Connect them to resources and advocate for better working conditions systemically',type:'advocate'}]},
+  {text:'Your proudest professional achievement would be:',answers:[{text:'A diagnosis that saved someone\'s life when everyone else had missed it',type:'diagnostician'},{text:'A patient who said you were the first person who ever made them feel truly heard',type:'caregiver'},{text:'Building a care model that became a standard others replicate',type:'teambuilder'},{text:'Policy or program change that improved health outcomes for an entire community',type:'advocate'}]}
+];
+
+let currentQ=0,scores={diagnostician:0,caregiver:0,teambuilder:0,advocate:0},selected=null;
+
+function startQuiz(){showScreen('screen-question');buildDots();renderQuestion()}
+function buildDots(){const c=document.getElementById('step-dots');c.innerHTML=QUESTIONS.map((_,i)=>`<div class="step-dot" id="dot-${i}"></div>`).join('')}
+function renderQuestion(){
+  const q=QUESTIONS[currentQ];
+  document.getElementById('q-counter').textContent=`Question ${currentQ+1} of ${QUESTIONS.length}`;
+  const pct=Math.round((currentQ/QUESTIONS.length)*100);
+  document.getElementById('q-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('q-num').textContent=`Question ${currentQ+1}`;
+  document.getElementById('q-text').textContent=q.text;
+  QUESTIONS.forEach((_,i)=>{const d=document.getElementById(`dot-${i}`);d.className='step-dot'+(i<currentQ?' done':i===currentQ?' active':'')});
+  const letters=['A','B','C','D'];
+  document.getElementById('answers').innerHTML=q.answers.map((a,i)=>`<button class="ans-btn" onclick="selectAnswer(${i},'${a.type}')"><span class="ans-letter">${letters[i]}</span><span>${a.text}</span></button>`).join('');
+  const nb=document.getElementById('next-btn');
+  nb.textContent=currentQ===QUESTIONS.length-1?'See My Results →':'Next →';
+  nb.className='next-btn';selected=null;
+}
+function selectAnswer(idx,type){document.querySelectorAll('.ans-btn').forEach(b=>b.classList.remove('selected'));document.querySelectorAll('.ans-btn')[idx].classList.add('selected');selected=type;document.getElementById('next-btn').classList.add('enabled')}
+function nextQuestion(){if(!selected)return;scores[selected]++;if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion()}else{showResult()}}
+function showResult(){
+  const top=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+  const a=ARCHETYPES[top];
+  document.getElementById('r-badge').textContent=a.badge;
+  document.getElementById('r-title').textContent=a.label;
+  document.getElementById('r-desc').textContent=a.desc;
+  document.getElementById('r-traits').innerHTML=a.traits.map(t=>`<div class="trait-card"><div class="t-icon">${t.icon}</div><div class="t-name">${t.name}</div></div>`).join('');
+  const total=QUESTIONS.length;
+  const order=['diagnostician','caregiver','teambuilder','advocate'];
+  document.getElementById('score-bars').innerHTML=order.map(k=>`<div class="score-row"><div class="score-label">${ARCHETYPES[k].label}</div><div class="score-track"><div class="score-fill" style="width:0%" data-pct="${Math.round((scores[k]/total)*100)}%"></div></div></div>`).join('');
+  showScreen('screen-result');
+  setTimeout(()=>{document.querySelectorAll('.score-fill').forEach(el=>{el.style.width=el.dataset.pct})},200);
+  launchConfetti();
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function retakeQuiz(){scores={diagnostician:0,caregiver:0,teambuilder:0,advocate:0};currentQ=0;selected=null;showScreen('screen-intro')}
+async function submitEmail(inputId,successId){
+  const email=document.getElementById(inputId).value.trim();
+  if(!email||!email.includes('@'))return;
+  const btn=document.querySelector(`#${inputId}`).nextElementSibling;
+  btn.textContent='Sending…';btn.disabled=true;
+  try{const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({access_key:'703d8f42-6326-4ee0-ae37-42a0b5d74e35',subject:'TCF Healthcare Quiz – Stay Connected',email,page:'healthcare-archetype-quiz'})});
+  if(r.ok){document.getElementById(successId).style.display='block';document.getElementById(inputId).value='';btn.textContent='✓ Done';}
+  else throw new Error();}catch{btn.textContent='Try Again';btn.disabled=false;}
+}
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal()}
+function launchConfetti(){
+  const canvas=document.getElementById('confetti-canvas');const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const colors=['#EE7331','#19B9A9','#C0629A','#1A8DA9','#086C43','#FFFFFF','#DBD5CA'];
+  const pieces=Array.from({length:160},()=>({x:Math.random()*canvas.width,y:-20-Math.random()*200,w:6+Math.random()*8,h:10+Math.random()*14,color:colors[Math.floor(Math.random()*colors.length)],rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-.5)*.15,vx:(Math.random()-.5)*3,vy:2.5+Math.random()*4,opacity:1}));
+  let frame=0;
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotSpeed;if(p.y>canvas.height*.7)p.opacity-=.015;if(p.opacity>0&&p.y<canvas.height+20){alive=true;ctx.save();ctx.globalAlpha=Math.max(0,p.opacity);ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}});frame++;if(alive&&frame<300)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}
+  draw();
+}
+</script>
+</body>
+</html>

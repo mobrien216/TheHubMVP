@@ -118,9 +118,9 @@ body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d1f10
     <span class="nav-text">Cleveland Foundation</span>
   </a>
   <div class="nav-ctas">
-    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <a class="btn-back" href="index.html">← All Experiences</a>
     <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
-    <a class="btn-donate" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Donate Today</a>
+    <a class="btn-donate" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Donate Today</a>
   </div>
 </nav>
 
@@ -164,7 +164,7 @@ body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d1f10
   <h2>Help Protect Cleveland's Natural Crown</h2>
   <p>The Emerald Necklace is one of America's great urban nature systems. Your support keeps it accessible, healthy, and growing for generations to come.</p>
   <div class="cta-btns">
-    <a class="cta-main" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">🌿 Protect the Necklace</a>
+    <a class="cta-main" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">🌿 Protect the Necklace</a>
     <a class="cta-alt" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Learn More ↗</a>
   </div>
   <div class="email-inline">
@@ -185,7 +185,7 @@ body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d1f10
     <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
     <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Get conservation news and environmental stewardship updates from the Cleveland Foundation.</p>
     <form onsubmit="submitModEmail(event)">
-      <input type="hidden" name="access_key" value="703d8f42-6326-4ee0-ae37-42a0b5d74e35">
+      <input type="hidden" name="access_key" value="198d543a-e3ed-4f23-b2f6-2bd4df3c4794">
       <input type="hidden" name="subject" value="Stay Connected – Emerald Necklace Map">
       <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
       <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
@@ -195,21 +195,29 @@ body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d1f10
 
 <script>
 const spots=[
-  {id:1,type:'park',lat:41.3939,lng:-81.7144,emoji:'🌳',name:'Rocky River Reservation',area:'Olmsted Falls to Lake Erie',desc:'A spectacular 4,000-acre valley carved by the Rocky River, stretching from the Cuyahoga border to Lake Erie. Features meadows, forests, and stunning gorge views.',features:['Fishing','Horseback Trails','Golf Course','Picnic Areas'],threat:'⚠️ Invasive species threaten native wildflowers — Cleveland Foundation supports removal programs.'},
-  {id:2,type:'park',lat:41.4764,lng:-81.6546,emoji:'🦌',name:'North Chagrin Reservation',area:'Willoughby Hills',desc:'One of the most wild corners of the Emerald Necklace, home to deer, red foxes, and over 80 species of birds. Features ancient beech forests and glacial-carved gorges.',features:['Hiking','Birding','Cross-Country Ski','Nature Center'],threat:'⚠️ Trail erosion from heavy use — restoration funding critically needed.'},
-  {id:3,type:'trail',lat:41.4250,lng:-81.6800,emoji:'🥾',name:'Towpath Trail',area:'Cuyahoga Valley Corridor',desc:'Following the historic Ohio & Erie Canal for 85 miles, the Towpath Trail connects Cleveland to Akron through stunning natural scenery and rich American history.',features:['Cycling','Walking','Historic Sites','Wildlife Viewing'],threat:'⚠️ Flooding and storm damage increasingly close sections — infrastructure support needed.'},
-  {id:4,type:'lake',lat:41.5101,lng:-81.6941,emoji:'💧',name:'Lake Erie Shoreline',area:'North Cleveland Lakefront',desc:'The southern shore of the world\'s 11th largest lake, offering beaches, fishing piers, and incredible migratory bird activity. The lifeline of Greater Cleveland\'s natural identity.',features:['Swimming','Kayaking','Fishing','Birding'],threat:'⚠️ Algal blooms and pollution threaten water quality — watershed protection is urgent.'},
-  {id:5,type:'garden',lat:41.4733,lng:-81.5944,emoji:'🌸',name:'Cleveland Botanical Garden',area:'University Circle',desc:'A 10-acre oasis in the heart of University Circle, with stunning glass conservatories replicating ecosystems from Madagascar and Costa Rica alongside curated formal gardens.',features:['Conservatory','Rose Garden','Children\'s Garden','Events'],threat:'⚠️ Community garden programs serve 2,000+ families — continued funding is essential.'},
-  {id:6,type:'park',lat:41.3597,lng:-81.6733,emoji:'🦅',name:'Big Creek Reservation',area:'Middleburg Hts · Brooklyn',desc:'A hidden gem following Big Creek through suburban southwest Cleveland, with restored wetlands and meadows providing critical habitat for migratory songbirds.',features:['Wetlands','Picnic Areas','Sledding Hill','Nature Walks'],threat:'⚠️ Stream channelization projects threaten natural hydrology — restoration in progress.'},
-  {id:7,type:'trail',lat:41.4410,lng:-81.7850,emoji:'🌊',name:'Lake to Lake Trail',area:'Lakewood to Rocky River',desc:'A key connector trail linking the lakefront with the Rocky River valley, passing through Lakewood parks and offering stunning Lake Erie views.',features:['Cycling','Running','Lake Views','Park Access'],threat:'⚠️ Connectivity gaps remain — Cleveland Foundation champions trail link completion.'},
-  {id:8,type:'lake',lat:41.4100,lng:-81.5870,emoji:'🐸',name:'Cuyahoga River Corridor',area:'Flats to Cuyahoga Valley',desc:'Once famous for catching fire in 1969, the Cuyahoga River is now a conservation success story — a testament to what community investment and environmental commitment can achieve.',features:['Kayaking','Fishing','History','Wildlife'],threat:'⚠️ Continued monitoring needed to sustain the river\'s remarkable recovery.'}
+  {id:1, type:'park', lat:41.4658, lng:-81.8180, emoji:'🌳', name:'Rocky River Reservation',    area:'Olmsted Falls to Lake Erie',         desc:'A spectacular 4,000-acre valley carved by the Rocky River, stretching from Olmsted Falls to Lake Erie with 30+ miles of trails, meadows, and stunning gorge views.',                                                       features:['Fishing','Horseback Trails','Golf Course','Picnic Areas','Nature Center'], threat:'Invasive species threaten native wildflowers — Cleveland Foundation supports removal programs.'},
+  {id:2, type:'park', lat:41.5614, lng:-81.4467, emoji:'🦌', name:'North Chagrin Reservation',  area:'Willoughby Hills / Mayfield Village', desc:'One of the wildest corners of the Emerald Necklace — home to deer, red foxes, and 80+ bird species. Ancient beech-maple forests and glacial-carved gorges define its character.',                                         features:['Hiking','Birding','Cross-Country Ski','Squires Castle','Nature Center'],   threat:'Trail erosion from heavy use — restoration funding critically needed.'},
+  {id:3, type:'park', lat:41.5181, lng:-81.4750, emoji:'🌿', name:'South Chagrin Reservation',  area:'Bentleyville / Solon',               desc:'A quiet forested gem in the eastern suburbs featuring dramatic Chagrin River gorges, shaded ravines, and scenic overlooks. Popular for hiking and equestrian use.',                                                            features:['Hiking','Horse Trails','Picnic Areas','Scenic Overlooks','Sledding'],     threat:'Chagrin River bank erosion threatens trail infrastructure — stabilization funding needed.'},
+  {id:4, type:'park', lat:41.4969, lng:-81.5253, emoji:'🌲', name:'Acacia Reservation',         area:'Lyndhurst / Richmond Heights',       desc:'A former country club transformed into one of the newest green spaces in the Necklace. Features open meadows, ponds, and a restored landscape being returned to nature.',                                                         features:['Walking','Ponds','Open Meadows','Wildlife Viewing','Picnic Areas'],       threat:'New restoration habitat requires sustained investment to establish native plantings.'},
+  {id:5, type:'park', lat:41.4389, lng:-81.6917, emoji:'🏞️', name:'Brookside Reservation',      area:'Cleveland / Brooklyn',               desc:'A beloved urban retreat in southwest Cleveland featuring a historic pool complex, shaded ravines, and meadows. One of the most visited reservations by city residents.',                                                          features:['Swimming Pool','Picnic Shelters','Disc Golf','Sledding','Zoo Proximity'], threat:'Aging infrastructure in the pool and shelter areas requires capital investment.'},
+  {id:6, type:'park', lat:41.4156, lng:-81.6242, emoji:'🌳', name:'Garfield Park Reservation',  area:'Garfield Heights / Cleveland',       desc:'A historic reservation in southeast Cleveland with restored meadows, mature forest, and the scenic Mill Creek corridor. Rich in community history and close to urban neighborhoods.',                                         features:['Hiking','Picnic Areas','Creek Access','Meadows','Historic Features'],     threat:'Mill Creek restoration is underway — community investment sustains natural recovery.'},
+  {id:7, type:'park', lat:41.3900, lng:-81.6050, emoji:'🦅', name:'Bedford Reservation',        area:'Bedford / Walton Hills',             desc:'Features the dramatic Tinkers Creek Gorge — a National Natural Landmark — with towering shale walls, waterfalls, and old-growth hemlocks. A truly spectacular landscape.',                                                    features:['Gorge Hiking','Waterfalls','Old-Growth Forest','Birding','Bridle Trails'], threat:'Hemlock woolly adelgid threatens the iconic trees of the gorge — treatment funding needed.'},
+  {id:8, type:'park', lat:41.3339, lng:-81.6058, emoji:'🌄', name:'Brecksville Reservation',    area:'Brecksville / Broadview Heights',    desc:'The largest Metroparks reservation, featuring miles of interconnected trails through mature forest, open meadows, and along Chippewa Creek. Connects directly to the Ohio Erie Canal Towpath.',                            features:['Towpath Access','Nature Center','Deer Lookup','Bridle Trails','Sledding'], threat:'Invasive shrubs like buckthorn reduce forest understory — removal programs are ongoing.'},
+  {id:9, type:'park', lat:41.2218, lng:-81.7375, emoji:'🦢', name:'Hinckley Reservation',       area:'Hinckley Township',                  desc:'Famous for the annual return of buzzards each March 15th, Hinckley Lake and surrounding forest offer boating, fishing, and one of the most beloved wildlife traditions in the region.',                                       features:['Boating','Fishing','Swimming Beach','Buzzard Day','Picnic Areas'],        threat:'Hinckley Lake dam and spillway need ongoing maintenance and capital funding.'},
+  {id:10,type:'park', lat:41.3703, lng:-81.8025, emoji:'💧', name:'Mill Stream Run Reservation', area:'Strongsville / Berea',              desc:'Two distinct areas — Baldwin Lake and Bonnie Park — connected by Mill Stream Run Creek. Features a disc golf course, scenic creek valley, and restored meadow habitats.',                                                        features:['Disc Golf','Fishing','Creek Walks','Meadows','Picnic Areas'],             threat:'Creek bank restoration work is needed after repeated flood events.'},
+  {id:11,type:'park', lat:41.3411, lng:-81.7328, emoji:'🌱', name:'Big Creek Reservation',      area:'Middleburg Heights / Brooklyn',      desc:'A hidden gem following Big Creek through suburban southwest Cleveland, with restored wetlands and meadows providing critical habitat for migratory songbirds.',                                                            features:['Wetlands','Birding','Picnic Areas','Sledding Hill','Nature Walks'],       threat:'Stream channelization projects threaten natural hydrology — restoration in progress.'},
+  {id:12,type:'park', lat:41.3575, lng:-81.7539, emoji:'🌿', name:'West Creek Reservation',     area:'Parma / Middleburg Heights',         desc:'A newer addition to the Necklace, West Creek protects a mosaic of wetlands, streams, and forests in a highly urbanized area — a vital wildlife corridor in southwest Cleveland.',                                             features:['Wetlands','Wildlife Corridor','Hiking','Birding','Restored Meadows'],     threat:'Surrounded by development, this reservation depends on strong conservation investment.'},
+  {id:13,type:'lake', lat:41.5185, lng:-81.7000, emoji:'🌊', name:'Lakefront Reservation',      area:'Cleveland Lakefront',                desc:'Eight miles of Lake Erie shoreline parks — Edgewater, Villa Angela, Euclid Beach, and Gordon Park — with beaches, fishing piers, and skyline views. The northern anchor of the Necklace.',                                       features:['Swimming','Fishing Piers','Cycling','Skyline Views','Seasonal Events'],   threat:'Shoreline erosion and algal blooms threaten water quality — watershed protection is urgent.'},
+  {id:14,type:'lake', lat:41.5647, lng:-81.5025, emoji:'🐟', name:'Euclid Creek Reservation',   area:'Euclid / South Euclid',              desc:'A narrow wooded valley following Euclid Creek from the lake to suburban headwaters. Provides a critical green corridor through a densely developed eastern suburb with surprising biodiversity.',                               features:['Hiking','Creek Access','Birding','Wildlife Corridor','Picnic Areas'],     threat:'Euclid Creek channelization impacts water quality — natural restoration is ongoing.'},
+  {id:15,type:'lake', lat:41.4872, lng:-81.6917, emoji:'🐸', name:'Cuyahoga River Corridor',    area:'Flats to Cuyahoga Valley',           desc:'Once famous for catching fire in 1969, the Cuyahoga River is now a conservation success story — a testament to what community investment and environmental commitment can achieve.',                                            features:['Kayaking','Fishing','Historic Sites','Wildlife Viewing','Towpath Access'], threat:'Continued monitoring is needed to sustain the remarkable recovery of this river.'},
+  {id:16,type:'garden',lat:41.5089,lng:-81.6043, emoji:'🌸', name:'Cleveland Botanical Garden', area:'University Circle',                  desc:'A 10-acre oasis in University Circle with glass conservatories replicating ecosystems from Madagascar and Costa Rica alongside curated formal gardens and a beloved childrens garden.',                                       features:['Conservatory','Rose Garden','Childrens Garden','Events','Glasshouse'],    threat:'Community garden programs serve 2,000+ families — continued funding is essential.'}
 ];
 
 const typeColors={park:'#086C43',trail:'#1A8DA9',lake:'#19B9A9',garden:'#EE7331'};
 const activeFilters=new Set(['park','trail','lake','garden']);
 let markers=[];
 
-const map=L.map('map',{center:[41.4250,-81.6700],zoom:11,zoomControl:true});
+const map=L.map('map',{center:[41.4100,-81.6400],zoom:10,zoomControl:true});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © Carto',maxZoom:19}).addTo(map);
 
 function createIcon(type){
@@ -237,7 +245,7 @@ function showSpot(s){
     <div class="spot-desc">${s.desc}</div>
     <div class="spot-features">${s.features.map(f=>`<span class="spot-feat">${f}</span>`).join('')}</div>
     <div class="spot-threat">${s.threat}</div>
-    <a class="spot-support-btn" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Protect This Place →</a>`;
+    <a class="spot-support-btn" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Protect This Place →</a>`;
 }
 
 function filterMap(type,btn){
@@ -252,7 +260,7 @@ function filterMap(type,btn){
 async function subEmail(){
   const email=document.getElementById('emailIn').value;
   if(!email)return;
-  try{const fd=new FormData();fd.append('access_key','703d8f42-6326-4ee0-ae37-42a0b5d74e35');fd.append('subject','Stay Connected – Emerald Necklace Map');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  try{const fd=new FormData();fd.append('access_key','198d543a-e3ed-4f23-b2f6-2bd4df3c4794');fd.append('subject','Stay Connected – Emerald Necklace Map');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
   document.getElementById('emailIn').style.display='none';
   document.querySelector('.email-sub').style.display='none';
   document.getElementById('emailOk').style.display='block';

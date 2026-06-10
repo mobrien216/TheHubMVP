@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleveland 2040 Vision Cards – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;--aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;--tan:#DBD5CA;--white:#F3F1EF}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;background:#0d0d1a;color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0d0d1a;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:inherit;font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+
+/* HERO */
+.hero{padding:70px 24px 48px;text-align:center;max-width:760px;margin:0 auto;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:700px;height:350px;background:radial-gradient(ellipse,rgba(238,115,49,.07) 0%,transparent 65%);pointer-events:none}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
+.hero h1{font-size:clamp(30px,5.5vw,58px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{color:var(--orange);font-style:normal}
+.hero p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.65;max-width:530px;margin:0 auto 32px}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.35);margin-top:-20px;margin-bottom:32px}
+
+/* DECK */
+.deck-wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+.deck-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:32px}
+.deck-nav-btn{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);width:44px;height:44px;border-radius:50%;font-family:inherit;font-size:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.deck-nav-btn:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:var(--white)}
+.deck-nav-btn:disabled{opacity:.25;cursor:not-allowed}
+.deck-counter{font-size:14px;font-weight:700;color:rgba(255,255,255,.4);min-width:80px;text-align:center}
+.card-stage{perspective:1200px;height:460px;position:relative}
+.vision-card{position:absolute;inset:0;border-radius:24px;overflow:hidden;transition:all .4s ease;cursor:default}
+.vision-card.exiting{animation:cardExit .35s ease forwards}
+.vision-card.entering{animation:cardEnter .35s ease forwards}
+@keyframes cardExit{to{opacity:0;transform:translateX(-60px) rotateY(-10deg)}}
+@keyframes cardEnter{from{opacity:0;transform:translateX(60px) rotateY(10deg)}to{opacity:1;transform:translateX(0) rotateY(0)}}
+.card-inner{height:100%;display:flex;flex-direction:column;padding:40px;position:relative;overflow:hidden}
+.card-number{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.45;margin-bottom:auto}
+.card-scenario{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;opacity:.8}
+.card-headline{font-size:clamp(24px,3.5vw,36px);font-weight:700;line-height:1.15;margin-bottom:16px;letter-spacing:-.01em}
+.card-body{font-size:16px;line-height:1.65;opacity:.75;max-width:600px;flex:1}
+.card-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.card-tag{font-size:12px;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-weight:600}
+.card-deco{position:absolute;right:-40px;bottom:-40px;font-size:140px;opacity:.06}
+
+/* Progress dots */
+.dot-row{display:flex;justify-content:center;gap:7px;margin-bottom:32px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .3s;cursor:pointer}
+.dot.active{background:var(--orange);width:22px;border-radius:4px}
+
+/* Reflection */
+.reflection-section{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:28px;margin-bottom:20px}
+.reflection-title{font-size:14px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.reflection-q{font-size:17px;font-weight:700;margin-bottom:20px;line-height:1.3}
+.reflection-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.refl-btn{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;cursor:pointer;text-align:left;color:var(--white);font-family:inherit;font-size:14px;font-weight:600;transition:all .2s;line-height:1.3}
+.refl-btn:hover{background:rgba(238,115,49,.1);border-color:var(--orange)}
+.refl-btn.picked{background:rgba(238,115,49,.15);border-color:var(--orange);color:var(--orange)}
+.skip-reflection{background:none;border:none;color:rgba(255,255,255,.3);font-family:inherit;font-size:13px;cursor:pointer;padding:4px;transition:color .2s}
+.skip-reflection:hover{color:rgba(255,255,255,.6)}
+
+/* Final */
+.final-section{display:none;text-align:center;padding:40px 20px}
+.final-section.show{display:block}
+.final-badge{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--red));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.final-title{font-size:28px;font-weight:700;margin-bottom:10px}
+.final-sub{font-size:16px;color:rgba(255,255,255,.5);line-height:1.55;max-width:500px;margin:0 auto 28px}
+.final-vision{font-size:18px;font-weight:700;color:var(--orange);margin-bottom:28px}
+.final-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.final-btn{padding:14px 28px;border-radius:50px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;border:none}
+.final-btn.primary{background:var(--orange);color:#fff}
+.final-btn.primary:hover{background:#d4631f}
+.final-btn.secondary{background:rgba(255,255,255,.08);color:var(--white);border:1.5px solid rgba(255,255,255,.15)}
+.final-btn.secondary:hover{background:rgba(255,255,255,.14)}
+.email-final{max-width:400px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px}
+.email-final h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.email-final p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:14px}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:130px;padding:10px 12px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:inherit;font-size:14px;outline:none}
+.email-in:focus{border-color:var(--orange)}
+.email-in::placeholder{color:rgba(255,255,255,.25)}
+.email-sub{padding:10px 16px;border-radius:9px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub:hover{background:#d4631f}
+.email-ok{display:none;font-size:14px;color:var(--aqua);font-weight:600;text-align:center;padding:6px 0}
+
+@media(max-width:600px){
+  .site-nav{padding:14px 16px}
+  .nav-ctas .btn-ghost{display:none}
+  .hero{padding:48px 16px 36px}
+  .deck-wrap{padding:0 12px 60px}
+  .card-inner{padding:28px 22px}
+  .reflection-opts{grid-template-columns:1fr}
+  .card-stage{height:400px}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openEmail()">Stay Connected</button>
+    <a class="btn-donate" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">For Business Leaders · New Ideas</div>
+  <h1>What's Your<br>Cleveland <em>2040?</em></h1>
+  <p>Flip through bold visions for Cleveland's future. React to each scenario, and we'll tell you what kind of city-builder you are.</p>
+  <p class="hero-sub">8 vision cards · 2 minutes</p>
+</section>
+
+<div class="deck-wrap">
+  <div class="deck-nav">
+    <button class="deck-nav-btn" id="prevBtn" onclick="goCard(-1)" disabled>←</button>
+    <span class="deck-counter" id="deckCounter">1 / 8</span>
+    <button class="deck-nav-btn" id="nextBtn" onclick="goCard(1)">→</button>
+  </div>
+  <div class="dot-row" id="dotRow"></div>
+  <div class="card-stage"><div id="visionCard" class="vision-card"></div></div>
+
+  <!-- Reflection per card -->
+  <div class="reflection-section" id="reflectionSection">
+    <div class="reflection-title">Your Take</div>
+    <div class="reflection-q" id="reflQ"></div>
+    <div class="reflection-opts" id="reflOpts"></div>
+    <button class="skip-reflection" onclick="skipReflection()">Skip this one →</button>
+  </div>
+
+  <!-- Final screen -->
+  <div class="final-section" id="finalSection">
+    <div class="final-badge">🏙️</div>
+    <div class="final-title">You're a <span id="builderType"></span></div>
+    <div class="final-sub" id="builderDesc"></div>
+    <div class="final-vision" id="builderVision"></div>
+    <div class="final-ctas">
+      <a class="final-btn primary" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Invest in This Vision</a>
+      <button class="final-btn secondary" onclick="resetDeck()">↺ New Deck</button>
+    </div>
+    <div class="email-final">
+      <h4>Shape Cleveland's Real Future</h4>
+      <p>Receive innovation briefings and investment opportunities from the Cleveland Foundation.</p>
+      <div class="email-row">
+        <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+        <button class="email-sub" onclick="subEmail()">Get Briefings</button>
+      </div>
+      <div class="email-ok" id="emailOk">✓ You're on the list — big ideas coming your way.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Email modal -->
+<div id="emailMod" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0d0d1a;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative">
+    <button onclick="document.getElementById('emailMod').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer">×</button>
+    <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Stay Connected</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5">Receive innovation briefings and investment opportunity updates.</p>
+    <form onsubmit="submitModEmail(event)">
+      <input type="hidden" name="access_key" value="35e711ff-c35d-4f19-8107-a6e72df72ed1">
+      <input type="hidden" name="subject" value="Stay Connected – Vision Cards">
+      <input type="email" name="email" placeholder="your@email.com" required style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:inherit;font-size:15px;margin-bottom:10px;outline:none">
+      <button type="submit" style="width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">Stay Connected →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const cards=[
+  {bg:'linear-gradient(135deg,#164430 0%,#086C43 100%)',deco:'🌱',scenario:'Economic Vision',headline:'"Cleveland becomes the midwest\'s clean energy capital by 2040."',body:'New federal investment and private sector momentum are positioning Cleveland as a hub for green manufacturing, solar supply chains, and workforce training in clean tech sectors.',tags:['Clean Energy','Jobs','Manufacturing'],q:'What\'s Cleveland\'s biggest opportunity here?',opts:['Attract major employers first','Train the workforce first','Build the infrastructure first','Lead with policy and incentives'],type:'pragmatist'},
+  {bg:'linear-gradient(135deg,#1A0A2A 0%,#C0629A 100%)',deco:'🎓',scenario:'Talent Vision',headline:'"Every Cleveland student has a guaranteed career pathway by 2035."',body:'A bold compact between anchor institutions, public schools, and employers ensures every student leaving Cleveland Public Schools has a job offer or college placement waiting for them.',tags:['Education','Workforce','Youth'],q:'What makes this vision succeed or fail?',opts:['Employer commitment','School quality','Family stability','Funding consistency'],type:'connector'},
+  {bg:'linear-gradient(135deg,#0A1A2E 0%,#1A8DA9 100%)',deco:'🏙️',scenario:'Neighborhood Vision',headline:'"Every Cleveland neighborhood has a thriving main street by 2040."',body:'Strategic investment in corridor revitalization, small business lending, and place-based development transforms every neighborhood into a destination — not just a commute.',tags:['Neighborhoods','Small Business','Place'],q:'Where should investment start?',opts:['Highest-need areas first','Emerging areas with momentum','Corridors with transit access','Anchor institution zones'],type:'builder'},
+  {bg:'linear-gradient(135deg,#1A1010 0%,#CC1E4B 100%)',deco:'🏥',scenario:'Health Vision',headline:'"Cleveland leads the world in health equity by 2040."',body:'Home to world-class medical institutions, Cleveland can eliminate health disparities between zip codes — closing the 20-year life expectancy gap between its wealthiest and poorest neighborhoods.',tags:['Health','Equity','Innovation'],q:'What\'s the right lever for health equity?',opts:['Access to care','Social determinants (housing, food)','Preventive programs','Medical research'],type:'connector'},
+  {bg:'linear-gradient(135deg,#0A1510 0%,#EE7331 100%)',deco:'🚀',scenario:'Innovation Vision',headline:'"Cleveland\'s startup ecosystem rivals Austin and Pittsburgh by 2035."',body:'Anchor university spinouts, a growing venture capital presence, and world-class research infrastructure are already in place — now Cleveland needs the culture of risk-taking to match.',tags:['Startups','Venture','Research'],q:'What does Cleveland\'s innovation ecosystem need most?',opts:['More venture capital','More talent density','Better founder support','More corporate partnerships'],type:'disruptor'},
+  {bg:'linear-gradient(135deg,#0A0A1A 0%,#19B9A9 100%)',deco:'💧',scenario:'Environment Vision',headline:'"Lake Erie becomes North America\'s most protected Great Lake by 2040."',body:'Cleveland sits at the center of 21% of the world\'s fresh surface water. A bold conservation agenda could define Cleveland\'s global brand while protecting one of Earth\'s most precious resources.',tags:['Lake Erie','Conservation','Water'],q:'How should Cleveland lead on water?',opts:['Stronger regulation','More restoration funding','Public education campaigns','Regional partnerships'],type:'steward'},
+  {bg:'linear-gradient(135deg,#1A1020 0%,#086C43 100%)',deco:'🎨',scenario:'Culture Vision',headline:'"Cleveland becomes a top-10 global arts destination by 2040."',body:'The Cleveland Orchestra. The Rock & Roll Hall of Fame. World-class museums. Cleveland has extraordinary cultural assets — the opportunity is to make them accessible to all, not just some.',tags:['Arts','Culture','Tourism'],q:'What unlocks Cleveland\'s cultural potential?',opts:['More public investment','Better marketing','Connecting arts to neighborhoods','Building artist liveability'],type:'connector'},
+  {bg:'linear-gradient(135deg,#1A0A10 0%,#EE7331 100%)',deco:'🌆',scenario:'Population Vision',headline:'"Cleveland grows to 500,000 residents by 2040."',body:'For the first time in decades, Cleveland\'s population decline has leveled off. Bold investment in housing affordability, quality of life, and economic opportunity could reverse a 70-year trend.',tags:['Population','Housing','Growth'],q:'What brings people to — and keeps them in — Cleveland?',opts:['Affordable housing','Career opportunities','Neighborhood safety','Culture & lifestyle'],type:'builder'}
+];
+
+const builderProfiles={
+  pragmatist:{name:'The Pragmatist',desc:'You focus on what works — evidence-based, action-oriented, and results-driven. You want to see Cleveland win through execution, not just vision.',vision:'"The best plan is the one that gets done."'},
+  connector:{name:'The Connector',desc:'You believe Cleveland\'s strength is in its people. You focus on relationships, equity, and making sure every resident has a stake in the city\'s success.',vision:'"A rising tide lifts every boat — but only if everyone\'s in the water."'},
+  builder:{name:'The City Builder',desc:'You think long-term and infrastructurally. Great cities are built over generations through consistent investment in place, systems, and neighborhoods.',vision:'"Build the city you want your grandchildren to inherit."'},
+  disruptor:{name:'The Disruptor',desc:'You see Cleveland\'s moment as requiring bold bets — new industries, new ideas, and the courage to compete with the best in the world.',vision:'"Don\'t catch up. Leap ahead."'},
+  steward:{name:'The Steward',desc:'You believe Cleveland\'s greatest asset is its natural and cultural inheritance — and that the foundation\'s job is to protect and amplify what already exists.',vision:'"We didn\'t inherit this city — we borrowed it from the future."'}
+};
+
+let current=0, responses=[], typeTally={};
+
+function buildDots(){
+  const row=document.getElementById('dotRow');
+  row.innerHTML=cards.map((_,i)=>`<div class="dot ${i===0?'active':''}" onclick="jumpCard(${i})"></div>`).join('');
+}
+
+function renderCard(dir=1){
+  const card=cards[current];
+  const el=document.getElementById('visionCard');
+  el.className='vision-card entering';
+  el.style.background=card.bg;
+  el.innerHTML=`<div class="card-inner">
+    <div class="card-number">Vision ${current+1} of ${cards.length}</div>
+    <div class="card-scenario">${card.scenario}</div>
+    <div class="card-headline">${card.headline}</div>
+    <div class="card-body">${card.body}</div>
+    <div class="card-tags">${card.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>
+    <div class="card-deco">${card.deco}</div>
+  </div>`;
+  setTimeout(()=>el.classList.remove('entering'),350);
+  document.getElementById('deckCounter').textContent=`${current+1} / ${cards.length}`;
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').disabled=current===cards.length-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('active',i===current)});
+  // Reflection
+  document.getElementById('reflQ').textContent=card.q;
+  const opts=document.getElementById('reflOpts');
+  opts.innerHTML=card.opts.map((o,i)=>`<button class="refl-btn" onclick="pickReflection(${i},'${card.type}')">${o}</button>`).join('');
+  document.getElementById('reflectionSection').style.opacity='1';
+}
+
+function pickReflection(idx,type){
+  document.querySelectorAll('.refl-btn').forEach((b,i)=>b.classList.toggle('picked',i===idx));
+  responses.push({card:current,choice:idx,type});
+  typeTally[type]=(typeTally[type]||0)+1;
+  setTimeout(()=>{if(current<cards.length-1)goCard(1); else showFinal();},600);
+}
+
+function skipReflection(){
+  if(current<cards.length-1)goCard(1); else showFinal();
+}
+
+function goCard(dir){
+  const next=current+dir;
+  if(next<0||next>=cards.length)return;
+  current=next;
+  renderCard(dir);
+}
+
+function jumpCard(idx){current=idx;renderCard(idx>current?1:-1);}
+
+function showFinal(){
+  document.getElementById('reflectionSection').style.display='none';
+  document.querySelectorAll('.deck-nav button').forEach(b=>b.disabled=true);
+  const fs=document.getElementById('finalSection');
+  fs.classList.add('show');
+  const top=Object.entries(typeTally).sort((a,b)=>b[1]-a[1])[0]?.[0]||'builder';
+  const profile=builderProfiles[top];
+  document.getElementById('builderType').textContent=profile.name;
+  document.getElementById('builderDesc').textContent=profile.desc;
+  document.getElementById('builderVision').textContent=profile.vision;
+}
+
+function resetDeck(){
+  current=0;responses=[];typeTally={};
+  document.getElementById('reflectionSection').style.display='block';
+  document.getElementById('finalSection').classList.remove('show');
+  document.querySelectorAll('.deck-nav button').forEach(b=>b.disabled=false);
+  buildDots();renderCard(1);
+}
+
+async function subEmail(){
+  const email=document.getElementById('emailIn').value;
+  if(!email)return;
+  try{const fd=new FormData();fd.append('access_key','35e711ff-c35d-4f19-8107-a6e72df72ed1');fd.append('subject','Vision Cards – Innovation Leader');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd})}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openEmail(){document.getElementById('emailMod').style.display='flex'}
+async function submitModEmail(e){
+  e.preventDefault();
+  try{await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(e.target)})}catch(er){}
+  e.target.innerHTML='<p style="color:var(--aqua);font-weight:600;text-align:center;padding:10px">✓ Big ideas coming your way.</p>';
+}
+
+buildDots();renderCard(1);
+</script>
+</body>
+</html>

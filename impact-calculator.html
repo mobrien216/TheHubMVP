@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impact Growth Calculator – Cleveland Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#164430;--mid:#086C43;--orange:#EE7331;--red:#CC1E4B;
+  --aqua:#19B9A9;--blue:#1A8DA9;--pink:#C0629A;--gray:#F3F2F0;
+  --tan:#DBD5CA;--white:#F3F1EF;
+  --bg:#0b1e14;--surface:rgba(255,255,255,.05);--border:rgba(255,255,255,.09);
+  --font:'Source Sans 3','Source Sans Pro',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.nav-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.nav-ctas{display:flex;gap:10px;align-items:center}
+.btn-back{color:rgba(255,255,255,.4);font-family:var(--font);font-size:12px;cursor:pointer;text-decoration:none;background:none;border:none;transition:color .2s}
+.btn-back:hover{color:rgba(255,255,255,.8)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 16px;border-radius:50px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-donate{background:var(--orange);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-donate:hover{background:#d4631f}
+.hero{padding:56px 24px 40px;text-align:center;max-width:720px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:14px}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{color:var(--aqua);font-style:normal}
+.hero p{font-size:16px;color:rgba(255,255,255,.55);line-height:1.65;max-width:520px;margin:0 auto}
+.calc-shell{max-width:1060px;margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:20px}
+.panel-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.panel-title-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0}
+.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.area-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;transition:all .2s;font-family:var(--font)}
+.area-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+.area-btn.active{border-color:var(--aqua);background:rgba(25,185,169,.1)}
+.area-icon{font-size:22px;margin-bottom:4px}
+.area-name{font-size:12px;font-weight:700;color:rgba(255,255,255,.8);line-height:1.2}
+.area-unit{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.mode-toggle{display:flex;gap:8px;margin-bottom:20px}
+.mode-btn{flex:1;padding:9px;border-radius:9px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.5);transition:all .2s}
+.mode-btn.active{background:var(--mid);border-color:var(--mid);color:#fff}
+.field{margin-bottom:20px}
+.field-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.field-label span:first-child{font-size:13px;font-weight:600;color:rgba(255,255,255,.7)}
+.field-val{font-size:15px;font-weight:700;color:var(--aqua)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.12);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--aqua);cursor:pointer;box-shadow:0 0 0 3px rgba(25,185,169,.25);transition:box-shadow .2s}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--aqua);cursor:pointer;border:none}
+.field-hints{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.25);margin-top:4px}
+.right-col{display:flex;flex-direction:column;gap:20px}
+.impact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.impact-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.impact-card.best{border-color:var(--aqua);background:rgba(25,185,169,.08)}
+.ic-best-tag{position:absolute;top:8px;right:8px;font-size:8px;font-weight:700;letter-spacing:.1em;color:var(--aqua);background:rgba(25,185,169,.15);padding:2px 6px;border-radius:10px;display:none}
+.impact-card.best .ic-best-tag{display:block}
+.ic-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+.ic-amount{font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px}
+.ic-units{font-size:28px;font-weight:700;line-height:1;margin-bottom:4px}
+.ic-unit-label{font-size:11px;color:rgba(255,255,255,.5)}
+.ic-desc{font-size:11px;color:rgba(255,255,255,.35);margin-top:6px;line-height:1.4}
+.chart-panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.chart-title{font-size:14px;font-weight:700}
+.chart-legend{display:flex;gap:16px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.5)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chart-wrap{position:relative;height:220px}
+#growthChart{display:block;width:100%;height:220px}
+.breakdown-panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px}
+.breakdown-title{font-size:13px;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,.8)}
+.breakdown-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.breakdown-label{font-size:13px;color:rgba(255,255,255,.6);width:160px;flex-shrink:0}
+.breakdown-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.breakdown-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.breakdown-val{font-size:13px;font-weight:700;width:80px;text-align:right;flex-shrink:0}
+.explanation{background:rgba(238,115,49,.07);border:1px solid rgba(238,115,49,.2);border-radius:14px;padding:18px}
+.explanation p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.65}
+.explanation strong{color:var(--orange)}
+.cta-section{max-width:700px;margin:0 auto;padding:0 20px 80px;text-align:center}
+.cta-section h2{font-size:26px;font-weight:700;margin-bottom:10px}
+.cta-section p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:28px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.cta-main{padding:14px 28px;background:var(--orange);border:none;border-radius:50px;color:#fff;font-family:var(--font);font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-main:hover{background:#d4631f;transform:translateY(-1px)}
+.cta-alt{padding:13px 28px;background:transparent;border:1.5px solid rgba(255,255,255,.2);border-radius:50px;color:rgba(255,255,255,.7);font-family:var(--font);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.cta-alt:hover{border-color:var(--aqua);color:var(--aqua)}
+.email-inline{max-width:440px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px}
+.email-inline h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.email-inline p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:16px}
+.email-row{display:flex;gap:8px;flex-wrap:wrap}
+.email-in{flex:1;min-width:130px;padding:10px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--white);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s}
+.email-in:focus{border-color:var(--orange)}
+.email-in::placeholder{color:rgba(255,255,255,.25)}
+.email-sub{padding:10px 18px;border-radius:9px;background:var(--orange);border:none;color:#fff;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.email-sub:hover{background:#d4631f}
+.email-ok{display:none;font-size:14px;color:var(--aqua);font-weight:600;text-align:center;padding:6px 0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:#0b1e14;border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:36px;max-width:380px;width:100%;position:relative}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer;line-height:1}
+.modal-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.modal-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5}
+.modal-email-in{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--white);font-family:var(--font);font-size:15px;margin-bottom:10px;outline:none}
+.modal-submit{width:100%;padding:12px;border-radius:10px;background:var(--orange);border:none;color:#fff;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.modal-submit:hover{background:#d4631f}
+@media(max-width:800px){
+  .calc-shell{grid-template-columns:1fr}
+  .impact-cards{grid-template-columns:1fr}
+  .site-nav{padding:14px 16px}
+  .hero{padding:40px 16px 28px}
+  .calc-shell{padding:0 12px 60px}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">
+    <div class="nav-dot"></div>
+    <span class="nav-text">Cleveland Foundation</span>
+  </a>
+  <div class="nav-ctas">
+    <a class="btn-back" href="hub.html">← All Experiences</a>
+    <button class="btn-ghost" onclick="openModal()">Stay Connected</button>
+    <a class="btn-donate" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Donate Today</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">For Business Leaders &amp; Community Champions</div>
+  <h1>See Your Gift <em>Grow</em> Into Impact</h1>
+  <p>Choose your area of impact, set your gift amount, and watch exactly how far your investment goes — and how it multiplies over time in Cleveland.</p>
+</section>
+
+<div class="calc-shell">
+  <div id="leftCol">
+    <div class="panel">
+      <div class="panel-title"><div class="panel-title-dot"></div>Choose Your Impact Area</div>
+      <div class="area-grid" id="areaGrid"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><div class="panel-title-dot"></div>Gift Amount</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeOneTime" onclick="setMode('onetime')">One-Time Gift</button>
+        <button class="mode-btn" id="modeMonthly" onclick="setMode('monthly')">Monthly Gift</button>
+      </div>
+      <div class="field">
+        <div class="field-label">
+          <span id="giftLabel">Gift Amount</span>
+          <span class="field-val" id="giftDisplay">$500</span>
+        </div>
+        <input type="range" id="giftSlider" min="25" max="10000" step="25" value="500" oninput="onGiftChange(this.value)">
+        <div class="field-hints"><span>$25</span><span>$10,000</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><div class="panel-title-dot"></div>Time Horizon &amp; Growth</div>
+      <div class="field">
+        <div class="field-label">
+          <span>Years of Impact</span>
+          <span class="field-val" id="yearsDisplay">10 years</span>
+        </div>
+        <input type="range" id="yearsSlider" min="1" max="25" step="1" value="10" oninput="onYearsChange(this.value)">
+        <div class="field-hints"><span>1 yr</span><span>25 yrs</span></div>
+      </div>
+      <div class="field">
+        <div class="field-label">
+          <span>Annual Growth Rate</span>
+          <span class="field-val" id="rateDisplay">6%</span>
+        </div>
+        <input type="range" id="rateSlider" min="1" max="12" step="0.5" value="6" oninput="onRateChange(this.value)">
+        <div class="field-hints"><span>1%</span><span>12%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-col">
+    <div class="impact-cards" id="impactCards"></div>
+    <div class="chart-panel">
+      <div class="chart-header">
+        <div class="chart-title">Impact Growth Over Time</div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,.3)"></div>Simple total</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--aqua)"></div>With investment growth</div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="growthChart"></canvas>
+      </div>
+    </div>
+    <div class="breakdown-panel">
+      <div class="breakdown-title">How Your Investment Is Allocated</div>
+      <div id="breakdownRows"></div>
+    </div>
+    <div class="explanation" id="explanationBox"></div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Ready to Make This Real?</h2>
+  <p>Your gift to the Cleveland Foundation is invested and deployed into the programs that matter most to you and your community.</p>
+  <div class="cta-btns">
+    <a class="cta-main" href="https://donate.stripe.com/eVqbJ17UVcpM2ka81m4c81O" target="_blank" rel="noopener">Make Your Impact Today →</a>
+    <a class="cta-alt" href="https://www.clevelandfoundation.org/" target="_blank" rel="noopener">Learn More ↗</a>
+  </div>
+  <div class="email-inline">
+    <h4>Get Impact Updates</h4>
+    <p>See how Cleveland Foundation investments are growing and what they fund across the region.</p>
+    <div class="email-row">
+      <input class="email-in" type="email" id="emailIn" placeholder="your@email.com">
+      <button class="email-sub" onclick="subEmail()">Subscribe</button>
+    </div>
+    <div class="email-ok" id="emailOk">You are in! Great things are coming.</div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="emailModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">x</button>
+    <div class="modal-title">Stay Connected</div>
+    <div class="modal-sub">Get updates on how the Cleveland Foundation invests in Greater Cleveland's future.</div>
+    <input class="modal-email-in" type="email" id="modalEmail" placeholder="your@email.com">
+    <button class="modal-submit" onclick="submitModalEmail()">Stay Connected</button>
+    <div class="email-ok" id="modalOk" style="margin-top:10px">Welcome to the community!</div>
+  </div>
+</div>
+
+<script>
+var AREAS=[
+  {id:'education', icon:'📚',name:'Education',        unitLabel:'Programming Hours', unitCost:12,   color:'#1A8DA9',
+   breakdown:[{label:'Tutoring sessions',pct:40,color:'#1A8DA9'},{label:'Materials and books',pct:25,color:'#19B9A9'},{label:'Educator support',pct:25,color:'rgba(26,141,169,.6)'},{label:'Admin',pct:10,color:'rgba(25,185,169,.4)'}],
+   programDesc:'after-school learning programs'},
+  {id:'food',      icon:'🍽️',name:'Food Security',    unitLabel:'Meals Provided',    unitCost:0.50, color:'#EE7331',
+   breakdown:[{label:'Food procurement',pct:65,color:'#EE7331'},{label:'Distribution ops',pct:20,color:'rgba(238,115,49,.7)'},{label:'Storage',pct:10,color:'rgba(238,115,49,.5)'},{label:'Admin',pct:5,color:'rgba(238,115,49,.3)'}],
+   programDesc:'food security and nutrition programs'},
+  {id:'housing',   icon:'🏠',name:'Housing',           unitLabel:'Nights of Shelter', unitCost:28,   color:'#086C43',
+   breakdown:[{label:'Facility costs',pct:45,color:'#086C43'},{label:'Case management',pct:30,color:'#19B9A9'},{label:'Support services',pct:15,color:'rgba(8,108,67,.7)'},{label:'Admin',pct:10,color:'rgba(8,108,67,.4)'}],
+   programDesc:'housing stability and shelter services'},
+  {id:'arts',      icon:'🎨',name:'Arts and Culture',  unitLabel:'Artist Residencies',unitCost:800,  color:'#C0629A',
+   breakdown:[{label:'Artist fees',pct:50,color:'#C0629A'},{label:'Program delivery',pct:25,color:'rgba(192,98,154,.7)'},{label:'Space and materials',pct:15,color:'rgba(192,98,154,.5)'},{label:'Admin',pct:10,color:'rgba(192,98,154,.3)'}],
+   programDesc:'arts education and cultural programs'},
+  {id:'health',    icon:'❤️',name:'Health and Wellness',unitLabel:'Patient Visits',   unitCost:45,   color:'#CC1E4B',
+   breakdown:[{label:'Clinical services',pct:55,color:'#CC1E4B'},{label:'Outreach',pct:25,color:'rgba(204,30,75,.6)'},{label:'Supplies',pct:12,color:'rgba(204,30,75,.4)'},{label:'Admin',pct:8,color:'rgba(204,30,75,.2)'}],
+   programDesc:'community health and wellness programs'},
+  {id:'environment',icon:'🌿',name:'Environment',      unitLabel:'Acres Protected',   unitCost:1200, color:'#19B9A9',
+   breakdown:[{label:'Land stewardship',pct:50,color:'#19B9A9'},{label:'Restoration',pct:30,color:'rgba(25,185,169,.7)'},{label:'Monitoring',pct:13,color:'rgba(25,185,169,.5)'},{label:'Admin',pct:7,color:'rgba(25,185,169,.3)'}],
+   programDesc:'environmental conservation and green spaces'}
+];
+
+var state={areaId:'education',mode:'onetime',gift:500,years:10,rate:6};
+
+function fvAnnuity(monthly,rate,years){
+  if(rate===0)return monthly*years*12;
+  var r=rate/100/12,n=years*12;
+  return monthly*((Math.pow(1+r,n)-1)/r);
+}
+function fvLump(pv,rate,years){
+  if(rate===0||years===0)return pv;
+  var r=rate/100/12,n=years*12;
+  return pv*Math.pow(1+r,n);
+}
+function calcResults(){
+  var area=AREAS.filter(function(a){return a.id===state.areaId;})[0];
+  var cost=area.unitCost;
+  var gift=state.gift,years=state.years,rate=state.rate;
+  if(state.mode==='onetime'){
+    var simple=gift;
+    var invested=fvLump(gift,rate,years);
+    return{
+      cards:[
+        {label:'One-Time Gift',amount:gift,available:simple,units:Math.floor(simple/cost),desc:'Direct gift today'},
+        {label:'Held for '+years+' yrs',amount:gift,available:simple,units:Math.floor(simple/cost),desc:years+' yr impact pool'},
+        {label:'Invested '+years+' yrs',amount:gift,available:invested,units:Math.floor(invested/cost),desc:'At '+rate+'% annual growth'}
+      ],
+      growthData:buildGrowth(0,gift,rate,years),
+      maxAvail:invested
+    };
+  } else {
+    var monthly=gift;
+    var simpleTotal=monthly*years*12;
+    var investedTotal=fvAnnuity(monthly,rate,years);
+    return{
+      cards:[
+        {label:'Monthly Gift',amount:monthly,available:monthly,units:Math.floor(monthly/cost),desc:'Per month, every month'},
+        {label:'Total Contributed',amount:simpleTotal,available:simpleTotal,units:Math.floor(simpleTotal/cost),desc:years+' yrs of giving'},
+        {label:'Monthly + Growth',amount:simpleTotal,available:investedTotal,units:Math.floor(investedTotal/cost),desc:'At '+rate+'% annual growth'}
+      ],
+      growthData:buildGrowth(monthly,0,rate,years),
+      maxAvail:investedTotal
+    };
+  }
+}
+function buildGrowth(monthly,lump,rate,years){
+  var pts=[];
+  for(var y=0;y<=years;y++){
+    var notInv=monthly>0?monthly*y*12:lump;
+    var inv=monthly>0?(y===0?0:fvAnnuity(monthly,rate,y)):fvLump(lump,rate,y);
+    pts.push({year:y,notInvested:Math.round(notInv),invested:Math.round(inv)});
+  }
+  return pts;
+}
+function fmt$(n){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:0}).format(n);}
+function fmtN(n){
+  if(n>=1000000)return(n/1000000).toFixed(1)+'M';
+  if(n>=1000)return(n/1000).toFixed(1)+'K';
+  return n.toLocaleString();
+}
+
+function render(){
+  var area=AREAS.filter(function(a){return a.id===state.areaId;})[0];
+  var results=calcResults();
+  renderAreaGrid(area);
+  renderCards(results,area);
+  renderChart(results.growthData,area.color);
+  renderBreakdown(area,results.maxAvail);
+  renderExplanation(results,area);
+}
+
+function renderAreaGrid(active){
+  var html='';
+  AREAS.forEach(function(a){
+    html+='<button class="area-btn'+(a.id===active.id?' active':'')+'" onclick="selectArea(\''+a.id+'\')">';
+    html+='<div class="area-icon">'+a.icon+'</div>';
+    html+='<div class="area-name" style="color:'+(a.id===active.id?a.color:'rgba(255,255,255,.8)')+'">'+a.name+'</div>';
+    html+='<div class="area-unit">'+a.unitLabel+'</div></button>';
+  });
+  document.getElementById('areaGrid').innerHTML=html;
+}
+
+function renderCards(results,area){
+  var maxUnits=0;
+  results.cards.forEach(function(c){if(c.units>maxUnits)maxUnits=c.units;});
+  var html='';
+  results.cards.forEach(function(c){
+    var best=c.units===maxUnits&&maxUnits>0;
+    html+='<div class="impact-card'+(best?' best':'')+'">';
+    html+='<div class="ic-best-tag">BEST IMPACT</div>';
+    html+='<div class="ic-label">'+c.label+'</div>';
+    html+='<div class="ic-amount">'+fmt$(c.available)+'</div>';
+    html+='<div class="ic-units" style="color:'+area.color+'">'+fmtN(c.units)+'</div>';
+    html+='<div class="ic-unit-label">'+area.unitLabel+'</div>';
+    html+='<div class="ic-desc">'+c.desc+'</div></div>';
+  });
+  document.getElementById('impactCards').innerHTML=html;
+}
+
+function renderChart(data,accentColor){
+  var canvas=document.getElementById('growthChart');
+  var wrap=canvas.parentElement;
+  canvas.width=wrap.offsetWidth||600;
+  canvas.height=220;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  var W=canvas.width,H=220;
+  var pl=54,pr=16,pt=10,pb=36;
+  var cw=W-pl-pr,ch=H-pt-pb;
+  var maxVal=1;
+  data.forEach(function(d){if(d.invested>maxVal)maxVal=d.invested;});
+  function xp(i){return pl+(i/(data.length-1))*cw;}
+  function yp(v){return pt+ch-(v/maxVal)*ch;}
+  // grid
+  ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;
+  for(var g=0;g<=4;g++){
+    var gy=pt+(ch*g/4);
+    ctx.beginPath();ctx.moveTo(pl,gy);ctx.lineTo(pl+cw,gy);ctx.stroke();
+    var gv=maxVal*(1-g/4);
+    ctx.fillStyle='rgba(255,255,255,.3)';ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillText(fmtN(gv),pl-6,gy+3);
+  }
+  // x labels
+  ctx.fillStyle='rgba(255,255,255,.3)';ctx.textAlign='center';ctx.font='10px sans-serif';
+  data.forEach(function(d,i){
+    if(i===0||i===data.length-1||i%Math.ceil(data.length/5)===0)
+      ctx.fillText('Yr '+d.year,xp(i),H-6);
+  });
+  // dashed line
+  ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  data.forEach(function(d,i){i===0?ctx.moveTo(xp(i),yp(d.notInvested)):ctx.lineTo(xp(i),yp(d.notInvested));});
+  ctx.stroke();ctx.setLineDash([]);
+  // fill
+  var grad=ctx.createLinearGradient(0,pt,0,pt+ch);
+  grad.addColorStop(0,accentColor+'55');grad.addColorStop(1,accentColor+'00');
+  ctx.fillStyle=grad;
+  ctx.beginPath();ctx.moveTo(xp(0),yp(0));
+  data.forEach(function(d,i){ctx.lineTo(xp(i),yp(d.invested));});
+  ctx.lineTo(xp(data.length-1),yp(0));ctx.closePath();ctx.fill();
+  // line
+  ctx.strokeStyle=accentColor;ctx.lineWidth=2.5;
+  ctx.beginPath();
+  data.forEach(function(d,i){i===0?ctx.moveTo(xp(i),yp(d.invested)):ctx.lineTo(xp(i),yp(d.invested));});
+  ctx.stroke();
+  // end dot
+  var ld=data[data.length-1];
+  ctx.fillStyle=accentColor;ctx.beginPath();ctx.arc(xp(data.length-1),yp(ld.invested),5,0,6.28);ctx.fill();
+}
+
+function renderBreakdown(area,maxAvail){
+  var html='';
+  area.breakdown.forEach(function(b){
+    var val=Math.round((b.pct/100)*maxAvail);
+    html+='<div class="breakdown-row">';
+    html+='<div class="breakdown-label">'+b.label+'</div>';
+    html+='<div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:'+b.pct+'%;background:'+b.color+'"></div></div>';
+    html+='<div class="breakdown-val" style="color:'+b.color+'">'+fmt$(val)+'</div></div>';
+  });
+  document.getElementById('breakdownRows').innerHTML=html;
+}
+
+function renderExplanation(results,area){
+  var simple=results.cards[1]?results.cards[1].available:results.cards[0].available;
+  var invested=results.cards[results.cards.length-1].available;
+  var diff=invested-simple;
+  var pct=simple>0?Math.round((diff/simple)*100):0;
+  var unitDiff=results.cards[results.cards.length-1].units-(results.cards[1]?results.cards[1].units:results.cards[0].units);
+  document.getElementById('explanationBox').innerHTML='<p>Over <strong>'+state.years+' years</strong>, your '+
+    '<strong>'+(state.mode==='monthly'?fmt$(state.gift)+'/mo':fmt$(state.gift)+' one-time')+'</strong> gift grows from '+
+    '<strong>'+fmt$(simple)+'</strong> to <strong>'+fmt$(invested)+'</strong> when invested'+
+    (pct>0?' - a <strong>+'+pct+'% increase</strong>':'')+
+    ', funding an additional <strong>'+fmtN(Math.max(0,unitDiff))+' '+area.unitLabel.toLowerCase()+'</strong> in Cleveland\'s <strong>'+area.programDesc+'</strong>.</p>';
+}
+
+function selectArea(id){state.areaId=id;render();}
+function setMode(mode){
+  state.mode=mode;
+  document.getElementById('modeOneTime').className='mode-btn'+(mode==='onetime'?' active':'');
+  document.getElementById('modeMonthly').className='mode-btn'+(mode==='monthly'?' active':'');
+  document.getElementById('giftLabel').textContent=mode==='monthly'?'Monthly Gift Amount':'Gift Amount';
+  var s=document.getElementById('giftSlider');
+  if(mode==='monthly'){s.max=1000;s.step=10;if(state.gift>1000){state.gift=100;s.value=100;document.getElementById('giftDisplay').textContent='$100/mo';}}
+  else{s.max=10000;s.step=25;}
+  onGiftChange(s.value);
+}
+function onGiftChange(val){
+  state.gift=parseInt(val);
+  document.getElementById('giftDisplay').textContent=state.mode==='monthly'?'$'+val+'/mo':'$'+parseInt(val).toLocaleString();
+  render();
+}
+function onYearsChange(val){
+  state.years=parseInt(val);
+  document.getElementById('yearsDisplay').textContent=val+' year'+(parseInt(val)>1?'s':'');
+  render();
+}
+function onRateChange(val){
+  state.rate=parseFloat(val);
+  document.getElementById('rateDisplay').textContent=val+'%';
+  render();
+}
+
+async function subEmail(){
+  var email=document.getElementById('emailIn').value.trim();
+  if(!email||email.indexOf('@')===-1)return;
+  try{var fd=new FormData();fd.append('access_key','35e711ff-c35d-4f19-8107-a6e72df72ed1');fd.append('subject','Stay Connected - Business Impact Calculator');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});}catch(e){}
+  document.getElementById('emailIn').style.display='none';
+  document.querySelector('.email-sub').style.display='none';
+  document.getElementById('emailOk').style.display='block';
+}
+function openModal(){document.getElementById('emailModal').className='modal-overlay open';}
+function closeModal(){document.getElementById('emailModal').className='modal-overlay';}
+async function submitModalEmail(){
+  var email=document.getElementById('modalEmail').value.trim();
+  if(!email||email.indexOf('@')===-1)return;
+  try{var fd=new FormData();fd.append('access_key','35e711ff-c35d-4f19-8107-a6e72df72ed1');fd.append('subject','Stay Connected - Impact Calc Modal');fd.append('email',email);await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});}catch(e){}
+  document.getElementById('modalOk').style.display='block';
+  document.getElementById('modalEmail').style.display='none';
+  document.querySelector('.modal-submit').style.display='none';
+}
+document.getElementById('emailModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+window.addEventListener('resize',function(){render();});
+render();
+</script>
+</body>
+</html>
